@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="JSON" target="SYSTEM_OUT">
+            <JsonTemplateLayout eventTemplateUri="classpath:report_template.json">
+            </JsonTemplateLayout>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="BinAbsInspector" level="warn" additivity="false">>
+            <AppenderRef ref="JSON"/>
+        </Logger>
+        <Logger name="CWE" level="warn" additivity="false">>
+            <AppenderRef ref="JSON" />
+        </Logger>
+        <Root level="error">
+            <AppenderRef ref="JSON"/>
+        </Root>
+    </Loggers>
+</Configuration>
