@@ -1,4 +1,4 @@
-name: Unit test
+name: Integration test
 
 on:
   push:
@@ -44,8 +44,14 @@ jobs:
         run: |
           cp $CPATH/../bin/com.microsoft.z3.jar $GITHUB_WORKSPACE/lib/com.microsoft.z3.jar
           sudo cp $CPATH/../bin/*.so  /lib
-      - name: Unit test
+      - name: Checkout binaries
+        uses: actions/checkout@v3
+        with:
+          repository: MatthewShao/BinAbsInspector-binaries
+          token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
+          path: src/integration/resources/binaries
+      - name: Integration test
         uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
         with:
           gradle-version: current
-          arguments: test
+          arguments: integrationTest
