@@ -45,10 +45,10 @@ public class Config {
             System.out.println("where <script parameters> in following format: ");
             System.out.println("        [-K <kElement>]");
             System.out.println("        [-callStringK <callStringMaxLen>]");
-            System.out.println("        [-Z3Timeout] <timeout>");
-            System.out.println("        [-timeout] <timeout>");
-            System.out.println("        [-entry] <address>");
-            System.out.println("        [-externalMap] <file>");
+            System.out.println("        [-Z3Timeout <timeout>]");
+            System.out.println("        [-timeout <timeout>]");
+            System.out.println("        [-entry <address>]");
+            System.out.println("        [-externalMap <file>]");
             System.out.println("        [-json]");
             System.out.println("        [-disableZ3]");
             System.out.println("        [-all]");
