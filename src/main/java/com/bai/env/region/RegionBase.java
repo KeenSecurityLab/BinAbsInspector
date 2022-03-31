@@ -16,7 +16,7 @@ public abstract class RegionBase {
 
     private static long accumulator = 0x10000;
 
-    RegionBase(int type, long size) {
+    protected RegionBase(int type, long size) {
         this.kind = type;
         this.size = size;
         switch (type) {
@@ -36,36 +36,67 @@ public abstract class RegionBase {
         }
     }
 
+    /**
+     * Check if this is a Global region
+     */
     public boolean isGlobal() {
         return kind == TYPE_GLOBAL;
     }
 
+    /**
+     * Check if this is a Register region
+     */
     public boolean isReg() {
         return kind == TYPE_REG;
     }
 
+    /**
+     * Check if this is a Local region
+     */
     public boolean isLocal() {
         return kind == TYPE_LOCAL;
     }
 
+    /**
+     * Check if this is a Heap region
+     */
     public boolean isHeap() {
         return kind == TYPE_HEAP;
     }
 
+    /**
+     * Check if this is a Unique region
+     */
     public boolean isUnique() {
         return kind == TYPE_UNIQUE;
     }
 
+    /**
+     * Setter for the size of this region
+     */
     public void setSize(long size) {
         this.size = size;
     }
 
+    /**
+     * Getter for the size of this region
+     */
     public long getSize() {
-        return this.size;
+        return size;
     }
 
+    /**
+     * Getter for the base of this region
+     */
     public long getBase() {
-        return this.base;
+        return base;
+    }
+
+    /**
+     * Getter for the region kind
+     */
+    public int getKind() {
+        return kind;
     }
 
     // thread-unsafe
@@ -78,14 +109,19 @@ public abstract class RegionBase {
         return res;
     }
 
-    public int getKind() {
-        return kind;
-    }
-
+    /**
+     * @hidden
+     */
     public abstract boolean equals(Object obj);
 
+    /**
+     * @hidden
+     */
     public abstract int hashCode();
 
+    /**
+     * @hidden
+     */
     @Override
     public String toString() {
         switch (kind) {

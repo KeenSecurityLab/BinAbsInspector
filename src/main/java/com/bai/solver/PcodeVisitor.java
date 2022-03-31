@@ -158,7 +158,7 @@ public class PcodeVisitor {
     }
 
     /**
-     * processConstraints
+     * Solve constraints
      *
      * @param address
      * @param inOutEnv

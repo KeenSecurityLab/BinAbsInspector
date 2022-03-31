@@ -8,8 +8,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ *  Manager which maintains relationship between taint id for taint bitmap in KSet and taint source
+ */
 public class TaintMap {
 
+    /**
+     * Description for each taint source, consisting of a function and its context
+     */
     public static class Source {
 
         private final Context context;
@@ -50,12 +56,15 @@ public class TaintMap {
     private static final int MAX_TAINT_CNT = 64;
     private static final Map<Source, Integer> taintSourceToIdMap = new HashMap<>();
 
+    /**
+     * Reset the maintained relationship
+     */
     public static void reset() {
         taintId = 0;
         taintSourceToIdMap.clear();
     }
 
-    public static int getTaintId(Context context, Function function) {
+    protected static int getTaintId(Context context, Function function) {
         if (taintId >= MAX_TAINT_CNT) {
             Logging.error("Taint id number reach " + MAX_TAINT_CNT
                     + "this may lead to false positive.");
@@ -72,6 +81,11 @@ public class TaintMap {
         return id;
     }
 
+    /**
+     * Get the corresponding taint sources for a given taint bitmap
+     * @param taints A given taint bitmap
+     * @return A list of corresponding taint sources
+     */
     public static List<Source> getTaintSourceList(long taints) {
         ArrayList<Source> res = new ArrayList<>();
         for (Map.Entry<Source, Integer> entry : taintSourceToIdMap.entrySet()) {
@@ -83,10 +97,21 @@ public class TaintMap {
         return res;
     }
 
+    /**
+     * Get a taint bitmap for a taint source consisting of a context and a function
+     * @param context Context component for a taint source
+     * @param function Function component for a taint source
+     * @return A taint bitmap for the information of a taint source
+     */
     public static long getTaints(Context context, Function function) {
         return 1L << getTaintId(context, function);
     }
 
+    /**
+     * Get a taint bitmap for a taint source with a specific taint id
+     * @param taintId Taint id for an existing taint source
+     * @return Taint bitmap for the given taint id
+     */
     public static long getTaints(int taintId) {
         return 1L << taintId;
     }

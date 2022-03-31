@@ -8,12 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
 public abstract class GraphBase<T> {
 
 
     /**
-     * Whether the graph has changed
+     * Whether the graph is changed
      */
     protected boolean changed = false;
 
@@ -63,7 +62,7 @@ public abstract class GraphBase<T> {
         private Set<T> out = new HashSet<>();
 
         /**
-         * It makes a node from the given parameter
+         * Create a node from the given parameter
          */
         public Node(T value) {
             this.value = value;
@@ -78,7 +77,6 @@ public abstract class GraphBase<T> {
     /**
      * Get a Node for the given value from the graph.
      * This may create a new node if needed.
-     *
      * @param value The node's value
      * @return the graph node.
      */
@@ -97,10 +95,9 @@ public abstract class GraphBase<T> {
 
 
     /**
-     * Creates a graph edge from source the destination.
-     * This also creates the graph node of the given parameter if needed.
-     *
-     * @param from the starting node's value
+     * Create a graph edge with source and destination.
+     * This also creates the graph node of the given parameters if needed.
+     * @param from the source node's value
      * @param to the destination node's value
      */
     public void addEdge(T from, T to) {
@@ -116,9 +113,8 @@ public abstract class GraphBase<T> {
     }
 
     /**
-     * delete a graph edge from source the destination.
-     *
-     * @param from the starting node's value
+     * Delete a graph edge with source and destination.
+     * @param from the source node's value
      * @param to the destination node's value
      */
     public void deleteEdge(T from, T to) {
@@ -144,9 +140,10 @@ public abstract class GraphBase<T> {
     }
 
     /**
-     * Reset the pred of the node
-     *
-     * @param node The node with  to reset pred
+     * @hidden
+     * @deprecated Weird method, to be removed
+     * Reset predecessor relationship of a node
+     * @param node The node to be processed
      */
     public void resetPreds(T node) {
         for (T t : getPreds(node)) {
@@ -155,9 +152,10 @@ public abstract class GraphBase<T> {
     }
 
     /**
-     * Reset the succ of the node
-     *
-     * @param node The node  to reset succ
+     * @hidden
+     * @deprecated Weird method, to be removed
+     * Reset successor relationship of a node
+     * @param node The node to be processed
      */
     public void resetSuccs(T node) {
         for (T t : getSuccs(node)) {
@@ -166,22 +164,29 @@ public abstract class GraphBase<T> {
     }
 
     /**
-     * Return a List of the node's succ
-     *
+     * Return a list of the node's successors
      * @param value the node value
-     * @return Return an ArrayList of the node's succ
+     * @return Return a list of the node's successors
      */
     public List<T> getSuccs(T value) {
         Node tmp = getNode(value);
         return new LinkedList<>(tmp.out);
     }
 
+    /**
+     * Return a list of the node's predecessors
+     * @param value the node value
+     * @return Return a list of the node's predecessors
+     */
+    public List<T> getPreds(T value) {
+        Node tmp = getNode(value);
+        return new LinkedList<>(tmp.in);
+    }
 
     /**
-     * Return a List of the node's pred
-     *
+     * Return an array of the node's successors
      * @param id the node's id
-     * @return Return an ArrayList of the node's pred
+     * @return Return an array of the node's successors
      */
     protected int[] getSuccs(int id) {
         Node tmp = nodeMap.get(idToNodeMap.get(id));
@@ -196,15 +201,12 @@ public abstract class GraphBase<T> {
         return res;
     }
 
-
     /**
-     * Return a List of the node's pred
-     *
+     * Return an array of the node's predecessors
      * @param id the node's id
-     * @return Return an ArrayList of the node's pred
+     * @return Return an array of the node's predecessors
      */
-
-    private int[] getPreds(int id) {
+    protected int[] getPreds(int id) {
         Node tmp = nodeMap.get(idToNodeMap.get(id));
         int[] res = new int[tmp.in.size()];
         if (tmp.in.size() == 0) {
@@ -218,21 +220,7 @@ public abstract class GraphBase<T> {
     }
 
     /**
-     * Return an ArrayList of the node's pred
-     *
-     * @param value the node value
-     * @return Return an ArrayList of the node's pred
-     */
-
-    public List<T> getPreds(T value) {
-        Node tmp = getNode(value);
-        return new LinkedList<>(tmp.in);
-    }
-
-
-    /**
-     * Return if the Graph has a path from src to dst
-     *
+     * Check if the graph has a path from src to dst
      * @param from The src node
      * @param to The dst node
      * @return True if it has a path from src to dst
@@ -262,6 +250,5 @@ public abstract class GraphBase<T> {
         }
         return false;
     }
-
-
+    
 }

@@ -5,6 +5,9 @@ public class Unique extends RegionBase {
         super(TYPE_UNIQUE, -1L);
     }
 
+    /**
+     * Get the singleton for Unique region
+     */
     public static Unique getInstance() {
         return UniqueInternal.INSTANCE;
     }
@@ -13,11 +16,17 @@ public class Unique extends RegionBase {
         private static final Unique INSTANCE = new Unique();
     }
 
+    /**
+     * @hidden
+     */
     @Override
     public boolean equals(Object obj) {
         return obj == this;
     }
 
+    /**
+     * @hidden
+     */
     @Override
     public int hashCode() {
         return TYPE_UNIQUE;

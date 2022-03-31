@@ -27,7 +27,7 @@ public class GlobalState {
     public static Architecture arch;
 
     /**
-     * Reset the analysis session.
+     * @hidden
      */
     public static void reset() {
         ALoc.resetPool();

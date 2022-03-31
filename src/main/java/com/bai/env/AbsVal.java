@@ -23,6 +23,8 @@ public class AbsVal {
     }
 
     /**
+     * @hidden
+     * @deprecated Redundant method, to be removed
      * Get a pointer AbsVal which points to the beginning of region.
      * @param region Accepts only Global, Local, Heap region
      * @return AbsVal
@@ -32,6 +34,8 @@ public class AbsVal {
     }
 
     /**
+     * @hidden
+     * @deprecated Redundant method, to be removed
      * Get a pointer AbsVal which points to the region with offset.
      * @param region Accepts only Global, Local, Heap region
      * @param offset offset to the beginning off region.
@@ -42,19 +46,31 @@ public class AbsVal {
         return new AbsVal(region, offset);
     }
 
+    /**
+     * Create an abstract value for a constant inside global region with a long
+     */
     public AbsVal(long value) {
         this(Global.getInstance(), value);
     }
 
+    /**
+     * Create an abstract value for a constant inside global region with a BigInteger
+     */
     public AbsVal(BigInteger bigVal) {
         this(Global.getInstance(), bigVal);
     }
 
+    /**
+     * Create an abstract value with a region and a long as inner value
+     */
     public AbsVal(RegionBase region, long value) {
         this.region = region;
         this.value = value;
     }
 
+    /**
+     * Create an abstract value with a region and a BigInteger as inner value
+     */
     public AbsVal(RegionBase region, BigInteger bigVal) {
         assert (bigVal.signum() >= 0);
         this.region = region;
@@ -66,23 +82,35 @@ public class AbsVal {
         }
     }
 
+    /**
+     * Check if this abstract value is stored as a BigInteger
+     */
     public boolean isBigVal() {
         return bigVal != null;
     }
 
+    /**
+     * Getter for the region of this abstract value
+     */
     public RegionBase getRegion() {
         return region;
     }
 
+    /**
+     * Getter for the long value of this abstract value, if it is stored as a long
+     */
     public long getValue() {
         return value;
     }
 
+    /**
+     * Get the offset starting from the region of this abstract value
+     */
     public long getOffset() {
         return value - region.getBase();
     }
 
-    public boolean isZero() {
+    protected boolean isZero() {
         if (bigVal != null) {
             return bigVal.signum() == 0;
         } else {
@@ -90,7 +118,7 @@ public class AbsVal {
         }
     }
 
-    public boolean isNegative(int bits) {
+    protected boolean isNegative(int bits) {
         assert region.isGlobal() : "Can only apply on global AbsVal";
         if (bits <= 64) {
             return ((value >>> (bits - 1)) & 1) == 1;
@@ -112,6 +140,9 @@ public class AbsVal {
         return bigValue.longValue();
     }
 
+    /**
+     * @hidden
+     */
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -132,6 +163,9 @@ public class AbsVal {
         return false;
     }
 
+    /**
+     * @hidden
+     */
     public int hashCode() {
         if (this.bigVal != null) {
             return region.hashCode() + bigVal.intValue();
@@ -139,6 +173,12 @@ public class AbsVal {
         return region.hashCode() + (int) value;
     }
 
+    /**
+     * Convert this abstract value into a BigInteger
+     * @param bits The bit width of this abstract value
+     * @param signed the signedness for this abstract value
+     * @return Converted BigInteger
+     */
     public BigInteger toBigInteger(int bits, boolean signed) {
         if (signed) {
             return bigVal != null ? toSigned(bigVal, bits) : toSigned(value, bits);
@@ -147,6 +187,9 @@ public class AbsVal {
         }
     }
 
+    /**
+     * @hidden
+     */
     public static BigInteger toSigned(BigInteger bigValue, int bits) {
         boolean msb = bigValue.testBit(bits - 1);
         if (msb) {
@@ -156,15 +199,20 @@ public class AbsVal {
         return bigValue;
     }
 
-    protected static BigInteger toSigned(long value, int bits) {
+    /**
+     * @hidden
+     */
+    public static BigInteger toSigned(long value, int bits) {
         if (bits <= Long.SIZE) {
             long sValue = signExtendToLong(value, bits);
             return BigInteger.valueOf(sValue);
         }
-
         return toUnsigned(value);
     }
 
+    /**
+     * @hidden
+     */
     public static BigInteger toUnsigned(BigInteger bigValue, int bits) {
         if (bigValue.signum() == -1) {
             return BigInteger.ONE.shiftLeft(bits).add(bigValue);
@@ -172,15 +220,19 @@ public class AbsVal {
         return bigValue;
     }
 
-    protected static BigInteger toUnsigned(long value) {
+    /**
+     * @hidden
+     */
+    public static BigInteger toUnsigned(long value) {
         if (value < 0) {
             return BigInteger.ONE.shiftLeft(Long.SIZE).add(BigInteger.valueOf(value));
         }
-
         return BigInteger.valueOf(value);
-
     }
 
+    /**
+     * @hidden
+     */
     public static long bytesTolong(byte[] bytes) {
         assert bytes.length <= 8;
         int len = bytes.length;
@@ -198,6 +250,9 @@ public class AbsVal {
         return res;
     }
 
+    /**
+     * @hidden
+     */
     public static BigInteger bytesToBigInteger(byte[] bytes) {
         assert bytes.length > 8;
         BigInteger res = null;
@@ -213,7 +268,7 @@ public class AbsVal {
         return res;
     }
 
-    public static AbsVal bytesToAbsVal(RegionBase region, byte[] bytes) {
+    protected static AbsVal bytesToAbsVal(RegionBase region, byte[] bytes) {
         if (bytes.length <= 8) {
             return new AbsVal(region, bytesTolong(bytes));
         } else {
@@ -221,6 +276,9 @@ public class AbsVal {
         }
     }
 
+    /**
+     * @hidden
+     */
     public static long signExtendToLong(long value, int bits) {
         assert (bits <= 64);
 
@@ -235,8 +293,9 @@ public class AbsVal {
         return value;
     }
 
-
-
+    /**
+     * @hidden
+     */
     @Override
     public String toString() {
         if (bigVal == null) {
@@ -245,4 +304,5 @@ public class AbsVal {
             return "<" + region.toString() + ", " + bigVal.toString(16) + "h>";
         }
     }
+
 }

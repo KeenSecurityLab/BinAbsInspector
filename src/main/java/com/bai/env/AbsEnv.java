@@ -16,22 +16,40 @@ public class AbsEnv {
 
     private JImmutableTreeMap<ALoc, KSet> envMap;
 
+    /**
+     * Constructor for an empty abstract environment
+     */
     public AbsEnv() {
         envMap = JImmutableTreeMap.of();
     }
 
+    /**
+     * Shallow copy constructor from others
+     */
     public AbsEnv(AbsEnv other) {
         envMap = other.envMap;
     }
 
+
+    /**
+     * Constructor with an inner map
+     */
     public AbsEnv(JImmutableTreeMap<ALoc, KSet> envMap) {
         this.envMap = envMap;
     }
 
+    /**
+     * Getter for the inner map
+     */
     public JImmutableTreeMap<ALoc, KSet> getEnvMap() {
         return envMap;
     }
 
+    /**
+     * Join operation for this AbsEnv and the other one
+     * @param other The other AbsEnv to be joined into this one
+     * @return null if the joined result is the same as the old this one, create a new AbsEnv otherwise.
+     */
     public AbsEnv join(AbsEnv other) {
         AbsEnv res = new AbsEnv(this);
         for (Entry<ALoc, KSet> entry : other.envMap) {
@@ -43,15 +61,6 @@ public class AbsEnv {
         // unchanged
         return null;
     }
-
-    /**
-     * Set the ALoc when it has not bound with KSet before.
-     *
-     * @param aLoc the target abstract location.
-     * @param oldKSet old KSet bound with the target ALoc.
-     * @param newKSet new KSet to be bound with ALoc.
-     * @param isStrongUpdate strong update or not.
-     */
 
     private void setEmptyALoc(ALoc aLoc, KSet oldKSet, KSet newKSet, boolean isStrongUpdate) {
         assert envMap.findEntry(aLoc).isEmpty();
@@ -71,14 +80,6 @@ public class AbsEnv {
         }
     }
 
-    /**
-     * Set the ALoc when it already binds with a KSet.
-     *
-     * @param aLoc the target abstract location.
-     * @param oldKSet old KSet bound with the target ALoc.
-     * @param newKSet new KSet to be bound with ALoc.
-     * @param isStrongUpdate strong update or not.
-     */
     private void setFilledALoc(ALoc aLoc, KSet oldKSet, KSet newKSet, boolean isStrongUpdate) {
         assert envMap.findEntry(aLoc).isFilled();
         if (isStrongUpdate) {
@@ -114,6 +115,12 @@ public class AbsEnv {
         return res;
     }
 
+    /**
+     * Update a record with a pair of ALoc and KSet inside this AbsEnv
+     * @param newALoc ALoc as the key for this record
+     * @param newKSet KSet as the value for this record
+     * @param isStrongUpdate Flag to indicate strong or weak update
+     */
     public void set(ALoc newALoc, KSet newKSet, boolean isStrongUpdate) {
         if (!newKSet.isTop()) {
             assert newALoc.len * 8 == newKSet.getBits();
@@ -236,8 +243,12 @@ public class AbsEnv {
         }
     }
 
+    /**
+     * Get KSet for a given ALoc
+     * @param aLoc A given ALoc to be queried on
+     * @return KSet as the result, may be Bottom, Noraml or Top KSet
+     */
     public KSet get(ALoc aLoc) {
-
         Holder<Entry<ALoc, KSet>> holder = envMap.findEntry(aLoc);
         if (holder.isEmpty()) {
             if (aLoc.region.isGlobal()) {
@@ -320,12 +331,11 @@ public class AbsEnv {
     }
 
     /**
-     * Return the Entry at position where intersect `aLoc` in envMap,
-     * return null if no intersection aLoc in envMap.
-     * This is useful for tainting, avoid cutting up the ALoc frequently.
-     *
-     * @param aLoc the pointer ALoc
-     * @return the Entry at position where intersect `aLoc`, or null if none found.
+     * Return the entry inside the inner map which intersects with a given ALoc,
+     * return null if no intersection exists in envMap.
+     * This is useful for tainting, avoid cutting up ALoc frequently.
+     * @param aLoc ALoc to be queried on
+     * @return the entry which intersects with the given ALoc, null otherwise.
      */
     public Entry<ALoc, KSet> getOverlapEntry(ALoc aLoc) {
         Holder<Entry<ALoc, KSet>> holder = envMap.findEntry(aLoc);
@@ -336,12 +346,6 @@ public class AbsEnv {
         sb.append(aLoc).append(" -> ").append(kSet).append("\n");
     }
 
-    /**
-     * Use for handling sub-register.
-     * @param sb
-     * @param aLoc
-     * @param kSet
-     */
     private void writeRegEntry(StringBuilder sb, ALoc aLoc, KSet kSet) {
         Register register = GlobalState.currentProgram.getLanguage()
                 .getRegister(GlobalState.flatAPI.getAddressFactory().getRegisterSpace(), aLoc.getBegin(),

@@ -47,7 +47,6 @@ public abstract class ExternalFunctionBase {
     /**
      * Invoke the function model.
      * Only use in PcodeVisitor.
-     *
      * @param pcode the pcode.
      * @param inOutEnv the inOut AbsEnv.
      * @param tmpEnv the temp AbsEnv.
@@ -94,7 +93,6 @@ public abstract class ExternalFunctionBase {
      * @hidden
      * Get a list of default parameter indexes which in PointerDataType.
      * Only use for checking CWE476 (Null Pointer Deference).
-     *
      * @return a list of indexes.
      */
     public List<Integer> getPointerParameterIndexes() {
@@ -163,7 +161,6 @@ public abstract class ExternalFunctionBase {
     /**
      * Get KSet of corresponding parameter.
      * Only use this in function models.
-     *
      * @param function the function.
      * @param paramIdx the parameter index.
      * @param absEnv the AbsEnv.

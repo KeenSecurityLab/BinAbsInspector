@@ -96,6 +96,13 @@ tasks.withType(JavaCompile).configureEach {
 javadoc {
 	exclude "**/ConfigDialog.java"
 	exclude "**/BinAbsInpsector.java"
+	exclude "com/bai/solver/GraphBase.java"
+	exclude "com/bai/solver/PcodeVisitor.java"
+	exclude "com/bai/solver/Worklist.java"
+	exclude "com/bai/solver/ConstraintSolver.java"
+	exclude "com/bai/solver/Interval.java"
+
+	options.memberLevel = JavadocMemberLevel.PUBLIC
 	source = sourceSets.main.allJava
 }
 

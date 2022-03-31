@@ -194,7 +194,7 @@ public class FunctionModelManager {
     }
 
     /**
-     * Init all registered function models.
+     * Initialize all registered function models.
      */
     public static void initAll() {
         initSymbol2ExternalFunctionMap();

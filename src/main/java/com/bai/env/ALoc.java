@@ -18,13 +18,15 @@ import java.util.Map;
 public class ALoc implements Comparable<ALoc> {
 
     protected RegionBase region;
+
     protected long begin;
+    
     protected int len;
+
     private static Map<ALoc, ALoc> pool = new HashMap<>();
 
     /**
      * Constructor of ALoc
-     *
      * @param region Region
      * @param begin begin >= 0
      * @param len len > 0, length of bytes
@@ -36,22 +38,41 @@ public class ALoc implements Comparable<ALoc> {
         this.len = len;
     }
 
+    /**
+     * Getter for the region of ALoc
+     */
     public RegionBase getRegion() {
         return region;
     }
 
+    /**
+     * Getter for the length of ALoc
+     */
     public int getLen() {
         return len;
     }
 
+    /**
+     * Getter for the begin offset inside the region of ALoc
+     */
     public long getBegin() {
         return begin;
     }
 
+    /**
+     * Wrapper for factory method of ALoc
+     */
     public static ALoc getALoc(RegionBase region, long begin, long len) {
         return getALoc(region, begin, (int) len);
     }
 
+    /**
+     * Factory method for creating ALoc
+     * @param region Region for this ALoc
+     * @param begin begin offset inside the above region for this ALoc
+     * @param len length for this ALOc
+     * @return Created ALoc
+     */
     public static ALoc getALoc(RegionBase region, long begin, int len) {
         ALoc newALoc = new ALoc(region, begin, len);
         ALoc oldALoc = pool.get(newALoc);
@@ -63,11 +84,9 @@ public class ALoc implements Comparable<ALoc> {
     }
 
     /**
-     * Get ALoc from pool if possible, to reduce space usage.
-     * One exception is varnode.isConstant, because it is not considered as a location.
-     *
-     * @param varnode
-     * @return ALoc
+     * Create ALoc from Ghidra's Varnode. 
+     * @param varnode Ghidra's varnode describing a variable. Constant varnode is not accepted
+     * @return Corresponding ALoc
      */
     public static ALoc getALoc(Varnode varnode) {
         if (varnode.isRegister()) {
@@ -82,10 +101,18 @@ public class ALoc implements Comparable<ALoc> {
         return null;
     }
 
+    /**
+     * Get ALoc for stack pointer register
+     */
     public static ALoc getSPALoc() {
         return ALoc.getALoc(Reg.getInstance(), GlobalState.arch.getSpIndex(), GlobalState.arch.getDefaultPointerSize());
     }
 
+
+    /**
+     * @hidden
+     * @deprecated Ugly method, to be changed 
+     */
     public static List<ALoc> getStackALocs(Varnode varnode, AbsEnv absEnv) {
         List<ALoc> res = new ArrayList<>();
         ALoc spALoc = ALoc.getSPALoc();
@@ -100,7 +127,9 @@ public class ALoc implements Comparable<ALoc> {
         return res;
     }
 
-
+    /**
+     * @hidden
+     */
     public static void resetPool() {
         pool.clear();
     }
@@ -114,11 +143,10 @@ public class ALoc implements Comparable<ALoc> {
      * BBBBBBBB <- this ALoc
      * }
      * </pre>
-     *
      * @param old ALoc
      * @return true if exactly overlapped, false otherwise.
      */
-    public boolean isExactly(ALoc old) {
+    protected boolean isExactly(ALoc old) {
         return begin == old.begin && len == old.len;
     }
 
@@ -131,11 +159,10 @@ public class ALoc implements Comparable<ALoc> {
      * BBBBBBBB---- <- this ALoc
      * }
      * </pre>
-     *
      * @param old ALoc
      * @return true if partially overlapped from left size, false otherwise.
      */
-    public boolean isLeftPartialOverlap(ALoc old) {
+    protected boolean isLeftPartialOverlap(ALoc old) {
         long end = begin + len;
         long oldEnd = old.begin + old.len;
         return begin < old.begin && end > old.begin && end < oldEnd;
@@ -150,11 +177,10 @@ public class ALoc implements Comparable<ALoc> {
      * ----BBBBBBBB <- this ALoc
      * }
      * </pre>
-     *
      * @param old ALoc
      * @return true if partially overlapped from right size, false otherwise.
      */
-    public boolean isRightPartialOverlap(ALoc old) {
+    protected boolean isRightPartialOverlap(ALoc old) {
         long end = begin + len;
         long oldEnd = old.begin + old.len;
         return old.begin < begin && oldEnd > begin && oldEnd < end;
@@ -176,11 +202,10 @@ public class ALoc implements Comparable<ALoc> {
      * BBBBBBBBBBBB <- this ALoc
      * }
      * </pre>
-     *
      * @param old ALoc
      * @return true if fully overlapped, false otherwise.
      */
-    public boolean isFullyOverlap(ALoc old) {
+    protected boolean isFullyOverlap(ALoc old) {
         long end = begin + len;
         long oldEnd = old.begin + old.len;
         if (begin == old.begin && len == old.len) {
@@ -205,11 +230,10 @@ public class ALoc implements Comparable<ALoc> {
      * BBBBBBBB---- <- this ALoc
      * }
      * </pre>
-     *
      * @param old ALoc
      * @return true if overlap subset, false otherwise.
      */
-    public boolean isSubsetOverlap(ALoc old) {
+    protected boolean isSubsetOverlap(ALoc old) {
         long end = begin + len;
         long oldEnd = old.begin + old.len;
         if (begin == old.begin && len == old.len) {
@@ -218,14 +242,23 @@ public class ALoc implements Comparable<ALoc> {
         return old.begin <= begin && oldEnd >= end;
     }
 
+    /**
+     * Check if this ALoc is PC register or not
+     */
     public boolean isPC() {
         return region == Reg.getInstance() && begin == GlobalState.arch.getPcIndex();
     }
 
+    /**
+     * Check if this ALoc is SP register or not
+     */
     public boolean isSP() {
         return region == Reg.getInstance() && begin == GlobalState.arch.getSpIndex();
     }
 
+    /**
+     * Check if this ALoc is one of flag registers or not
+     */
     public boolean isFlag() {
         if (region != Reg.getInstance()) {
             return false;
@@ -233,6 +266,9 @@ public class ALoc implements Comparable<ALoc> {
         return Arrays.stream(GlobalState.arch.getFlagIndexes()).anyMatch(idx -> idx == begin);
     }
 
+    /**
+     * Check if this ALoc reprensents a readable global address or not
+     */
     public boolean isGlobalReadable() {
         if (!region.isGlobal()) {
             return false;
@@ -245,6 +281,9 @@ public class ALoc implements Comparable<ALoc> {
         return memoryBlock.isRead();
     }
 
+    /**
+     * Check if this ALoc reprensents a writable global address or not
+     */
     public boolean isGlobalWritable() {
         if (!region.isGlobal()) {
             return false;
@@ -257,6 +296,9 @@ public class ALoc implements Comparable<ALoc> {
         return memoryBlock.isWrite();
     }
 
+    /**
+     * @hidden
+     */
     @Override
     public int compareTo(ALoc rhs) {
         if (this.region.equals(rhs.region)) {
@@ -278,10 +320,16 @@ public class ALoc implements Comparable<ALoc> {
         return -1;
     }
 
+    /**
+     * @hidden
+     */
     public int hashCode() {
         return region.hashCode() + (int) begin;
     }
 
+    /**
+     * @hidden
+     */
     public boolean equals(Object rhs) {
         if (this == rhs) {
             return true;
@@ -293,6 +341,9 @@ public class ALoc implements Comparable<ALoc> {
         return false;
     }
 
+    /**
+     * @hidden
+     */
     @Override
     public String toString() {
         if (region.isReg()) {

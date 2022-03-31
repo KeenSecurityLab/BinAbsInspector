@@ -17,58 +17,19 @@ import java.util.Stack;
 
 
 public class CFG extends GraphBase<Address> {
-
+    
     private Function f;
-    /**
-     * A map of all CFG mapping to its function
-     */
-    static Map<Function, CFG> pool = new HashMap<>();
+ 
+    private static Map<Function, CFG> pool = new HashMap<>();
 
     private final Map<Address, Integer> wtoMap = new HashMap<>();
-
-    /**
-     * Set of node in the loop
-     */
+    
     private Set<Integer> isInLoopSet = new HashSet<>();
-
-
-    private final List<Integer> wideningPointList = new ArrayList<>();
-
-    public Map<Address, Integer> getWTOMap() {
-        return wtoMap;
-    }
 
     private int order;
 
     /**
-     * Returns the CFG for the given function. If the CFG does not exist, a new one is
-     * created and returned.
-     *
-     * @param f The function to get the CFG for.
-     * @return The CFG for the given function f.
-     */
-    public static CFG getCFG(Function f) {
-        CFG cfg = pool.get(f);
-        if (cfg != null) {
-            return cfg;
-        }
-        // make a new CFG for the function f if the CFG does not exist
-        cfg = new CFG(f);
-        pool.put(f, cfg);
-        return cfg;
-    }
-
-    /**
-     * Reset the CFG pool
-     */
-    public static void resetPool() {
-        pool.clear();
-    }
-
-    /**
      * Initialize a CFG of the given function f.
-     *
-     * @param f The function to create a CFG for.
      */
     private CFG(Function f) {
         this.f = f;
@@ -97,23 +58,9 @@ public class CFG extends GraphBase<Address> {
     }
 
     /**
-     * Return if the given node is in a loop
-     *
-     * @param node The function that will be checked
-     * @return True if the given node ia a loop
-     */
-    public boolean isInLoop(Address node) {
-        return isInLoopSet.contains(nodeToIdMap.get(node));
-    }
-
-    public int getSum() {
-        return sum;
-    }
-
-    /**
      * Compute Weak Topological Ordering.
      */
-    public void computeWTO() {
+    private void computeWTO() {
         order = sum;
         depthFirstNums = new int[sum];
         Stack<Integer> stack = new Stack<>();
@@ -122,29 +69,10 @@ public class CFG extends GraphBase<Address> {
         visit(0, stack);
     }
 
-    /**
-     * Re-compute the Weak Topological Ordering if the graph has changed.
-     */
-    public void refresh() {
-        if (!changed) {
-            return;
-        }
-        computeWTO();
-        changed = false;
-    }
-
-    /**
-     * Performs a depth-first search as well as creating a Weak Topological Ordering
-     * at the given id's nodes.
-     *
-     * @param id The id of the CFG node to start the visiting process.
-     * @param stack to record the id
-     * @return
-     */
     private int visit(int id, Stack<Integer> stack) {
         stack.push(id);
         num++;
-        depthFirstNums[id] = num;    // labels this node with the depth first numbering
+        depthFirstNums[id] = num;    // label this node with the depth first numbering
         int head = depthFirstNums[id];
         boolean loop = false;
         int[] succs = getSuccs(id);
@@ -160,8 +88,8 @@ public class CFG extends GraphBase<Address> {
                 loop = true;
             }
         }
-        if (head == depthFirstNums[id]) {
 
+        if (head == depthFirstNums[id]) {
             depthFirstNums[id] = -1; // +Infinite, unreachable
             int elem = stack.pop();
             if (loop) {
@@ -181,12 +109,7 @@ public class CFG extends GraphBase<Address> {
         return head;
     }
 
-    /**
-     * @param id
-     * @param stack
-     */
     private void component(int id, Stack<Integer> stack) {
-        wideningPointList.add(id);
         int[] succs = getSuccs(id);
         for (int e : succs) {
             if (depthFirstNums[e] != -1) {
@@ -196,32 +119,7 @@ public class CFG extends GraphBase<Address> {
     }
 
     /**
-     * Checks if the given address is a widening point.
-     * This method also creates a CFGNode for the given address if needed.
-     *
-     * @param address The address of the address to check if it is a widening point or not
-     * @return true if it is a widening point, false otherwise
-     */
-    public boolean isWideningPoint(Address address) {
-        Node tmp = getNode(address);
-        int id = -1;
-        for (Map.Entry<Integer, Address> elem : idToNodeMap.entrySet()) {
-            if (elem.getValue().equals(address)) {
-                id = elem.getKey();
-                break;
-            }
-        }
-        if (id == -1) {    // address has not been created, cannot be WP
-            return false;
-        }
-        return wideningPointList.contains(id);
-    }
-
-    /**
-     * Returns the targets of this instruction's flow.
-     *
-     * @param cur The current address.
-     * @return An array of addresses representing the target of the flow.
+     * Return the targets of this instruction's flow.
      */
     private static Address[] getFlowTargets(Address cur) {
         Instruction inst = GlobalState.flatAPI.getInstructionAt(cur);
@@ -271,16 +169,79 @@ public class CFG extends GraphBase<Address> {
         return flowTargets.toArray(Address[]::new);
     }
 
+    /**
+     * Re-compute the Weak Topological Ordering (WTO) if the graph has changed.
+     */
+    protected void refresh() {
+        if (!changed) {
+            return;
+        }
+        computeWTO();
+        changed = false;
+    }
 
+    /**
+     * Get WTO for each address in this CFG
+     * @return The WTO map for each address of this CFG
+     */ 
+    public Map<Address, Integer> getWTOMap() {
+        return wtoMap;
+    }
+
+    /**
+     * Return the CFG for the given function. If the CFG does not exist, a new one is
+     * created and returned.
+     * @param f The function to get the CFG for.
+     * @return The CFG for the given function f.
+     */
+    public static CFG getCFG(Function f) {
+        CFG cfg = pool.get(f);
+        if (cfg != null) {
+            return cfg;
+        }
+        // make a new CFG for the function f if the CFG does not exist
+        cfg = new CFG(f);
+        pool.put(f, cfg);
+        return cfg;
+    }
+
+    /**
+     * @hidden
+     */ 
+    public static void resetPool() {
+        pool.clear();
+    }
+
+    /**
+     * Check if the given node is in a loop
+     * @param node The function that will be checked
+     * @return True if the given node ia a loop
+     */
+    public boolean isInLoop(Address node) {
+        return isInLoopSet.contains(nodeToIdMap.get(node));
+    }
+
+    /**
+     * @hidden
+     */ 
+    public int getSum() {
+        return sum;
+    }
+    
+    /**
+     * @hidden
+     */ 
     @Override
     public boolean equals(Object obj) {
         return super.equals(obj);
     }
 
+    /**
+     * @hidden
+     */ 
     @Override
     public int hashCode() {
         return f.hashCode();
     }
-
 
 }

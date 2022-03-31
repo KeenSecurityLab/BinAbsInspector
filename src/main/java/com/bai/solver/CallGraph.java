@@ -12,13 +12,11 @@ import java.util.Set;
 public class CallGraph extends GraphBase<Function> {
 
     private Function entryFunction;
-
-    /**
-     * A map of all CallGraph mapping to its function
-     */
+    
     private static Map<Function, CallGraph> pool = new HashMap<>();
 
     /**
+     * @hidden
      * Reset the CallGraph pool
      */
     public static void resetPool() {
@@ -26,9 +24,8 @@ public class CallGraph extends GraphBase<Function> {
     }
 
     /**
-     * Returns the CallGraph for the given function. If the CallGraph does not exist, a new one is
-     * created and returned.
-     *
+     * Returns the CallGraph for the given function. If the CallGraph does not exist, a new one will
+     * be created.
      * @param f The function to get the CallGraph for.
      * @return The CallGraph for the given function f.
      */
@@ -44,7 +41,6 @@ public class CallGraph extends GraphBase<Function> {
 
     /**
      * Initialize a CallGraph of the given entry function.
-     *
      * @param entryFunction The entry function to create a CallGraph.
      */
     private CallGraph(Function entryFunction) {
@@ -67,11 +63,17 @@ public class CallGraph extends GraphBase<Function> {
         }
     }
 
+    /**
+     * @hidden
+     */
     @Override
     public boolean equals(Object obj) {
         return super.equals(obj);
     }
 
+    /**
+     * @hidden
+     */
     @Override
     public int hashCode() {
         return entryFunction.hashCode();

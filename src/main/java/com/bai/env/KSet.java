@@ -35,44 +35,86 @@ public class KSet implements Iterable<AbsVal> {
 
     protected long taints;
 
+   /**
+     * Constructor for an empty KSet
+     * @param bits Bit width for this KSet
+     */
     public KSet(int bits) {
         this(bits, 0);
     }
 
+   /**
+     * Constructor for an empty KSet with taint information
+     * @param bits Bit width for this KSet
+     * @param taints Taint bitmap for this KSet
+     */
     public KSet(int bits, long taints) {
         this.kSet = JImmutables.set();
         this.bits = bits;
         this.taints = taints;
     }
 
+
+    /**
+     * Shallow copy constructor
+     * @param obj The other KSet to be copied
+     */
     public KSet(KSet obj) {
         this.kSet = obj.kSet;
         this.bits = obj.bits;
         this.taints = obj.taints;
     }
 
+   /**
+     * Constructor with a specific set
+     * @param kSet The underlying immutable set 
+     * @param bits Bit width for this KSet
+     */
     public KSet(JImmutableSet<AbsVal> kSet, int bits) {
         this(kSet, bits, 0);
     }
 
+   /**
+     * Constructor with a specific set and taint information
+     * @param kSet The underlying immutable set 
+     * @param bits Bit width for this KSet
+     * @param taints Taint bitmap for this KSet
+     */
     public KSet(JImmutableSet<AbsVal> kSet, int bits, long taints) {
         this.kSet = kSet;
         this.bits = bits;
         this.taints = taints;
     }
 
+    /**
+     * Get the bit width of this KSet object 
+     * @return Bit width
+     */
     public int getBits() {
         return bits;
     }
 
+    /**
+     * Get the underlying immutable set
+     * @return Inner immutable set 
+     */
     public JImmutableSet<AbsVal> getInnerSet() {
         return kSet;
     }
 
+    /**
+     * Get a clean Top KSet object
+     * @return Top object without taint information
+     */
     public static KSet getTop() {
         return getTop(0);
     }
 
+    /**
+     * Get a Top KSet with taint information
+     * @param taints Taint bitmap for this Top
+     * @return Top object with taint bitmap
+     */
     public static KSet getTop(long taints) {
         KSet res = topMap.get(taints);
         if (res == null) {
@@ -82,10 +124,20 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
+    /**
+     * Get a Bottom KSet object
+     * @param bits bit width for Bottom object
+     * @return Bottom Kset object
+     */
     public static KSet getBot(int bits) {
         return new KSet(bits, 0);
     }
 
+    /**
+     * Get a True KSet with taint information
+     * @param taints Taint bitmap for this Top
+     * @return True object with taint bitmap
+     */    
     public static KSet getTrue(long taints) {
         KSet res = trueMap.get(taints);
         if (res == null) {
@@ -95,6 +147,11 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
+    /**
+     * Get a False KSet with taint information
+     * @param taints Taint bitmap for this Top
+     * @return False object with taint bitmap
+     */   
     public static KSet getFalse(long taints) {
         KSet res = falseMap.get(taints);
         if (res == null) {
@@ -104,6 +161,11 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
+    /**
+     * Get a Unknown KSet with taint information
+     * @param taints Taint bitmap for this Top
+     * @return Unknown object with taint bitmap
+     */ 
     public static KSet getUnknown(long taints) {
         KSet res = unknownMap.get(taints);
         if (res == null) {
@@ -113,6 +175,12 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
+
+    /**
+     * Check whether the corresponding bit in taint bitmap is set or not
+     * @param sourceId Indicate which taint number to be checked
+     * @return Check result
+     */     
     public boolean checkTaints(int sourceId) {
         assert (sourceId >= 0 && sourceId < 64);
 
@@ -123,14 +191,27 @@ public class KSet implements Iterable<AbsVal> {
         return ((taints >>> sourceId) & 1) == 1;
     }
 
+    /**
+     * Get taint bitmap
+     * @return Taint bitmap as a long
+     */
     public long getTaints() {
         return taints;
     }
 
+    /**
+     * Test taint information is valid or not
+     * @return Test result: true for valid, false otherwise
+     */
     public boolean isTaint() {
         return taints != 0;
     }
 
+    /**
+     * Set new taint information for an existing KSet
+     * @param newTaints new taint bitmap to be set
+     * @return A new KSet object with new taint bitmap
+     */
     @CheckReturnValue
     public KSet setTaints(long newTaints) {
         if (!this.isNormal()) {
@@ -141,18 +222,35 @@ public class KSet implements Iterable<AbsVal> {
         return new KSet(kSet, bits, newTaints);
     }
 
+
+    /**
+     * Test whether this is a Top object
+     * @return Test result
+     */
     public boolean isTop() {
         return kSet == null;
     }
 
+    /**
+     * Test whether this is a Bottom object
+     * @return Test result
+     */
     public boolean isBot() {
         return kSet != null && kSet.isEmpty();
     }
 
+    /**
+     * Test whether this is a normal KSet (i.e., KSet with a nonempty underlying set)
+     * @return Test result
+     */
     public boolean isNormal() {
         return kSet != null && !kSet.isEmpty();
     }
 
+    /**
+     * Test whether this is a True KSet
+     * @return Test result
+     */
     public boolean isTrue() {
         if (kSet != null) {
             if (kSet.size() == 1) {
@@ -164,6 +262,10 @@ public class KSet implements Iterable<AbsVal> {
         return false;
     }
 
+    /**
+     * Test whether this is a False KSet
+     * @return Test result
+     */
     public boolean isFalse() {
         if (kSet != null) {
             if (kSet.size() == 1) {
@@ -174,14 +276,27 @@ public class KSet implements Iterable<AbsVal> {
         return false;
     }
 
+    /**
+     * Test whether this is a Unknown KSet
+     * @return Test result
+     */
     public boolean isUnknown() {
         return !isFalse() && !isTrue();
     }
 
+    /**
+     * Test whether this is a KSet with only one element
+     * @return Test result
+     */
     public boolean isSingleton() {
         return kSet.size() == 1;
     }
 
+    /**
+     * Abstract union operation on KSet
+     * @param rhs KSet object to be joined with the old one
+     * @return If join result is different from the old one, a reference to the new KSet object. Otherwise, null 
+     */
     public KSet join(KSet rhs) {
         if (!isTop() && !rhs.isTop()) {
             assert this.bits == rhs.bits;
@@ -224,6 +339,11 @@ public class KSet implements Iterable<AbsVal> {
         return new KSet(res, bits, newTaints);
     }
 
+    /**
+     * Insert an abstract value into this KSet. If beyond limit K, return a Top object
+     * @param val Abstract value to be inserted
+     * @return Result KSet object, may be Top or Normal KSet object
+     */
     @CheckReturnValue
     public KSet insert(AbsVal val) {
         // Disabled for test
@@ -240,6 +360,11 @@ public class KSet implements Iterable<AbsVal> {
         return new KSet(kSet.insert(val), bits, taints);
     }
 
+    /**
+     * Remove an abstract value from this KSet object
+     * @param val Abstract value to be removed
+     * @return Result KSet object, may be Top, Normal or Bottom KSet
+     */
     @CheckReturnValue
     public KSet remove(AbsVal val) {
         if (isTop()) {
@@ -248,28 +373,27 @@ public class KSet implements Iterable<AbsVal> {
         return new KSet(kSet.delete(val), bits, taints);
     }
 
-    public static long getMask(int bits) {
+    protected static long getMask(int bits) {
         return bits == 64 ? -1L : (1L << bits) - 1;
     }
 
-    public static BigInteger getBigMask(int bits) {
+    protected static BigInteger getBigMask(int bits) {
         return BigInteger.ONE.shiftLeft(bits).subtract(BigInteger.ONE);
     }
 
-    private boolean isShiftExceedBits(AbsVal op) {
+    protected static boolean isShiftExceedBits(AbsVal op) {
         return op.bigVal != null || (op.value >= bits || op.value < 0);
     }
 
     /**
      * Computes region of addition and multiplication operation.
      * This can only be done for the following situation:
-     * G + G => G; G + H => H; G + L => L;
-     *
+     * G + G => G; G + H => H; G + L => L
      * @param op1 AbsVal
      * @param op2 AbsVal
      * @return Region
      */
-    private RegionBase getRegionAddMult(AbsVal op1, AbsVal op2) {
+    protected static RegionBase getRegionAddMult(AbsVal op1, AbsVal op2) {
         if (op1.region.isGlobal()) {
             return op2.region;
         }
@@ -284,13 +408,12 @@ public class KSet implements Iterable<AbsVal> {
      * Computes region of subtraction operation.
      * This can only be done for the following situation:
      * G - G => G; L - G => L; H - G = H;
-     * H - H => G; L - L => G;
-     *
+     * H - H => G; L - L => G
      * @param op1 AbsVal
      * @param op2 AbsVal
      * @return Region
      */
-    private RegionBase getRegionSub(AbsVal op1, AbsVal op2) {
+    protected static RegionBase getRegionSub(AbsVal op1, AbsVal op2) {
         if (op1.region.equals(op2.region)) {
             return Global.getInstance();
         }
@@ -303,13 +426,12 @@ public class KSet implements Iterable<AbsVal> {
     /**
      * Computes region of division and remainder operation.
      * This can only be done for the following situation:
-     * G / G => G; L / G => L; H / G = H;
-     *
+     * G / G => G; L / G => L; H / G = H
      * @param op1 AbsVal
      * @param op2 AbsVal
      * @return Region
      */
-    private RegionBase getRegionDivRem(AbsVal op1, AbsVal op2) {
+    protected static RegionBase getRegionDivRem(AbsVal op1, AbsVal op2) {
         if (op2.region.isGlobal()) {
             return op1.region;
         }
@@ -320,13 +442,12 @@ public class KSet implements Iterable<AbsVal> {
      * Computes region of left/right shift operation.
      * This can only be done for the following situation:
      * G & G => G; L & G => L; H & G = H;
-     * L & L => G; H & H => G;
-     *
+     * L & L => G; H & H => G
      * @param op1 AbsVal
      * @param op2 AbsVal
      * @return Region
      */
-    private RegionBase getRegionBinaryLogic(AbsVal op1, AbsVal op2) {
+    protected static RegionBase getRegionBinaryLogic(AbsVal op1, AbsVal op2) {
         if (op1.region.equals(op2.region)) {
             return Global.getInstance();
         }
@@ -339,10 +460,13 @@ public class KSet implements Iterable<AbsVal> {
         return null;
     }
 
-    public long getBinaryTaintResult(KSet rhs) {
+    protected long getBinaryTaintResult(KSet rhs) {
         return this.taints | rhs.taints;
     }
 
+    /**
+     * @hidden
+     */
     public KSet add(KSet rhs) {
         if (!isTop() && !rhs.isTop()) {
             assert this.bits == rhs.bits;
@@ -376,7 +500,9 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
-
+    /**
+     * @hidden
+     */
     public KSet sub(KSet rhs) {
         if (!isTop() && !rhs.isTop()) {
             assert this.bits == rhs.bits;
@@ -412,6 +538,9 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
+    /**
+     * @hidden
+     */
     public KSet mult(KSet rhs) {
         if (!isTop() && !rhs.isTop()) {
             assert this.bits == rhs.bits;
@@ -445,7 +574,9 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
-
+    /**
+     * @hidden
+     */
     public KSet div(KSet rhs) {
         if (!isTop() && !rhs.isTop()) {
             assert this.bits == rhs.bits;
@@ -484,6 +615,9 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
+    /**
+     * @hidden
+     */
     public KSet sdiv(KSet rhs) {
         if (!isTop() && !rhs.isTop()) {
             assert this.bits == rhs.bits;
@@ -524,6 +658,9 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
+    /**
+     * @hidden
+     */
     public KSet rem(KSet rhs) {
         if (!isTop() && !rhs.isTop()) {
             assert this.bits == rhs.bits;
@@ -561,6 +698,9 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
+    /**
+     * @hidden
+     */
     public KSet srem(KSet rhs) {
         if (!isTop() && !rhs.isTop()) {
             assert this.bits == rhs.bits;
@@ -601,7 +741,9 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
-
+    /**
+     * @hidden
+     */
     public KSet lshift(KSet rhs) {
         long taintRes = getBinaryTaintResult(rhs);
         if (isTop() || rhs.isTop()) {
@@ -639,6 +781,9 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
+    /**
+     * @hidden
+     */
     public KSet rshift(KSet rhs) {
         long taintRes = getBinaryTaintResult(rhs);
         if (isTop() || rhs.isTop()) {
@@ -676,7 +821,9 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
-
+    /**
+     * @hidden
+     */
     public KSet srshift(KSet rhs) {
         long taintRes = getBinaryTaintResult(rhs);
         if (isTop() || rhs.isTop()) {
@@ -725,6 +872,9 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
+    /**
+     * @hidden
+     */
     public KSet int_xor(KSet rhs) {
         if (!isTop() && !rhs.isTop()) {
             assert this.bits == rhs.bits;
@@ -758,6 +908,9 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
+    /**
+     * @hidden
+     */
     public KSet int_and(KSet rhs) {
         if (!isTop() && !rhs.isTop()) {
             assert this.bits == rhs.bits;
@@ -791,6 +944,9 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
+    /**
+     * @hidden
+     */
     public KSet int_or(KSet rhs) {
         if (!isTop() && !rhs.isTop()) {
             assert this.bits == rhs.bits;
@@ -824,6 +980,9 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
+    /**
+     * @hidden
+     */
     public KSet int_2comp() {
         if (isTop()) {
             return this;
@@ -843,6 +1002,9 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
+    /**
+     * @hidden
+     */
     public KSet int_negate() {
         if (isTop()) {
             return this;
@@ -863,6 +1025,9 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
+    /**
+     * @hidden
+     */
     public KSet int_zext(int newBits) {
         assert (newBits > bits);
 
@@ -872,6 +1037,9 @@ public class KSet implements Iterable<AbsVal> {
         return new KSet(this.kSet, newBits, this.taints);
     }
 
+    /**
+     * @hidden
+     */
     public KSet int_sext(int newBits) {
         assert (newBits > bits);
 
@@ -888,6 +1056,9 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
+    /**
+     * @hidden
+     */
     public KSet int_carry(KSet rhs) {
         if (!isTop() && !rhs.isTop()) {
             assert this.bits == rhs.bits;
@@ -935,6 +1106,9 @@ public class KSet implements Iterable<AbsVal> {
         return getUnknown(taintRes);
     }
 
+    /**
+     * @hidden
+     */
     public KSet int_scarry(KSet rhs) {
         if (!isTop() && !rhs.isTop()) {
             assert this.bits == rhs.bits;
@@ -993,7 +1167,9 @@ public class KSet implements Iterable<AbsVal> {
         return getUnknown(taintRes);
     }
 
-    // Do not need to separate the case when bits < 64, because the improvement is negligible
+    /**
+     * @hidden
+     */
     public KSet int_sborrow(KSet rhs) {
         if (!isTop() && !rhs.isTop()) {
             assert this.bits == rhs.bits;
@@ -1035,6 +1211,9 @@ public class KSet implements Iterable<AbsVal> {
         return getUnknown(taintRes);
     }
 
+    /**
+     * @hidden
+     */
     public KSet int_less(KSet rhs) {
         if (!isTop() && !rhs.isTop()) {
             assert this.bits == rhs.bits;
@@ -1083,6 +1262,9 @@ public class KSet implements Iterable<AbsVal> {
         return getUnknown(taintRes);
     }
 
+    /**
+     * @hidden
+     */
     public KSet int_sless(KSet rhs) {
         if (!isTop() && !rhs.isTop()) {
             assert this.bits == rhs.bits;
@@ -1136,6 +1318,9 @@ public class KSet implements Iterable<AbsVal> {
         return getUnknown(taintRes);
     }
 
+    /**
+     * @hidden
+     */
     public KSet int_equal(KSet rhs) {
         if (!isTop() && !rhs.isTop()) {
             assert this.bits == rhs.bits;
@@ -1156,6 +1341,9 @@ public class KSet implements Iterable<AbsVal> {
         return getUnknown(taintRes);
     }
 
+    /**
+     * @hidden
+     */
     public KSet bool_xor(KSet rhs) {
         assert (bits == 8 && rhs.bits == 8);
 
@@ -1179,6 +1367,9 @@ public class KSet implements Iterable<AbsVal> {
         return getUnknown(taintRes);
     }
 
+    /**
+     * @hidden
+     */
     public KSet bool_or(KSet rhs) {
         assert (bits == 8 && rhs.bits == 8);
 
@@ -1194,6 +1385,9 @@ public class KSet implements Iterable<AbsVal> {
         return getUnknown(taintRes);
     }
 
+    /**
+     * @hidden
+     */
     public KSet bool_and(KSet rhs) {
 
         long taintRes = getBinaryTaintResult(rhs);
@@ -1208,6 +1402,9 @@ public class KSet implements Iterable<AbsVal> {
         return getUnknown(taintRes);
     }
 
+    /**
+     * @hidden
+     */
     public KSet bool_not() {
 
         if (isTrue()) {
@@ -1220,6 +1417,7 @@ public class KSet implements Iterable<AbsVal> {
     }
 
     /**
+     * @hidden
      * Concatenation operation that understands the endianess of the data.
      * this KSet contains the most significant part, rhs is least significant part
      *
@@ -1258,6 +1456,7 @@ public class KSet implements Iterable<AbsVal> {
     }
 
     /**
+     * @hidden
      * Truncate operator that understands the endianess of the data.
      * rhs KSet indicates the number of least significant bytes of this KSets to be thrown away.
      * output is filled with any remaining bytes up to the size of output.
@@ -1297,14 +1496,23 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
+    /**
+     * @hidden
+     */
     public KSet truncate(int begin, long bytes) {
         return this.truncate(begin, (int) bytes);
     }
 
+    /**
+     * @hidden
+     */
     public KSet truncate(long begin, long bytes) {
         return this.truncate((int) begin, (int) bytes);
     }
 
+    /**
+     * @hidden
+     */
     public KSet truncate(int begin, int bytes) {
 
         if (isTop()) {
@@ -1334,6 +1542,9 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
+    /**
+     * @hidden
+     */
     public KSet concat(KSet following) {
 
         if (isTop() || following.isTop()) {
@@ -1365,6 +1576,9 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
+    /**
+     * @hidden
+     */
     public KSet count_bits(int bits) {
         long taintRes = getBinaryTaintResult(this);
         if (isTop()) {
@@ -1388,6 +1602,9 @@ public class KSet implements Iterable<AbsVal> {
         return res;
     }
 
+    /**
+     * @hidden
+     */
     @Override
     public String toString() {
         if (isTop()) {
@@ -1399,6 +1616,9 @@ public class KSet implements Iterable<AbsVal> {
         return kSet.toString() + "#" + taints;
     }
 
+    /**
+     * @hidden
+     */
     @Override
     public boolean equals(Object rhs) {
         if (!(rhs instanceof KSet)) {
@@ -1414,6 +1634,9 @@ public class KSet implements Iterable<AbsVal> {
         return false;
     }
 
+    /**
+     * @hidden
+     */
     @Override
     public int hashCode() {
         if (kSet == null) {
@@ -1423,6 +1646,9 @@ public class KSet implements Iterable<AbsVal> {
         }
     }
 
+    /**
+     * @hidden
+     */
     @Override
     public Iterator<AbsVal> iterator() {
         return kSet.iterator();

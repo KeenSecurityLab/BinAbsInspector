@@ -28,16 +28,16 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.javimmutable.collections.JImmutableSet;
 import org.javimmutable.collections.tree.JImmutableTreeMap;
 
-//no duplicate contexts
+
 public class Context {
 
     private static final Map<Context, Context> pool = new HashMap<>();
 
-    public static Context current;
+    private static Context current;
 
-    public static Stack<Context> active = new Stack<>();
+    private static Stack<Context> active = new Stack<>();
 
-    public static Stack<Context> pending = new Stack<>();
+    private static Stack<Context> pending = new Stack<>();
 
     private Function function;
 
@@ -66,52 +66,82 @@ public class Context {
         this.worklist = new Worklist(CFG.getCFG(function));
     }
 
+    /**
+     * Get a map with addresses and their "before" abstract environments under this context
+     */
     public Map<Address, AbsEnv> getAbsEnvIn() {
         return inValues;
     }
 
+    /**
+     * Get a map with addresses and their "after" abstract environments under this context
+     */
     public Map<Address, AbsEnv> getAbsEnvOut() {
         return outValues;
     }
 
+    /**
+     * Getter for function field in Context
+     */
     public Function getFunction() {
         return function;
     }
 
+    /**
+     * Getter for call string field in Context
+     */
     public long[] getCallString() {
         return callstring;
     }
 
+    /**
+     * @hidden
+     * @deprecated Not recommended to use. To be removed
+     */
     public Function[] getFuncs() {
         return funcs;
     }
 
+    /**
+     * @hidden
+    */
     public static Map<Context, Context> getPool() {
         return pool;
     }
 
+    /**
+     * Get exit value of this context (i.e., return value)
+     */
     public JImmutableTreeMap<ALoc, KSet> getExitValue() {
         return exitValue;
     }
 
-    public boolean isEmptyWorklist() {
-        return worklist.isEmpty();
-    }
-
+    /**
+     * Set exit value of this context, generally for return instructions
+     */
     public void setExitValue(JImmutableTreeMap<ALoc, KSet> exitValue) {
         this.exitValue = exitValue;
     }
 
+    /**
+     * Set the "before" abstract environment for an address under this context
+     */
     public void setValueBefore(Address addr, AbsEnv env) {
         assert (env != null);
         inValues.put(addr, env);
     }
 
+    /**
+     * Set the "after" abstract environment for an address under this context
+     */
     public void setValueAfter(Address addr, AbsEnv env) {
         assert (env != null);
         outValues.put(addr, env);
     }
 
+    /**
+     * Get the abstract environment before an address under this context
+     */
     public AbsEnv getValueBefore(Address addr) {
         if (inValues.containsKey(addr)) {
             return inValues.get(addr);
@@ -119,6 +149,9 @@ public class Context {
         return new AbsEnv();
     }
 
+    /**
+     * Get the abstract environment after an address under this context
+     */
     public AbsEnv getValueAfter(Address addr) {
         if (outValues.containsKey(addr)) {
             return outValues.get(addr);
@@ -126,19 +159,14 @@ public class Context {
         return null;
     }
 
+    /**
+     * @hidden
+     */
     public KSet getOldSpKSet() {
         return oldSpKSet;
     }
 
-    public Address[] getInAddresses() {
-        return inValues.keySet().stream().sorted().toArray(Address[]::new);
-    }
-
-    public Address[] getOutAddresses() {
-        return outValues.keySet().stream().sorted().toArray(Address[]::new);
-    }
-
-    public void updateOldSp(KSet kSet) {
+    private void updateOldSp(KSet kSet) {
         KSet union = oldSpKSet.join(kSet);
         oldSpKSet = (union == null) ? oldSpKSet : union;
         if (oldSpKSet.isTop()) {
@@ -166,6 +194,9 @@ public class Context {
         inOutEnv.set(spALoc, spKSet, true);
     }
 
+    /**
+     * Get partial call string from the original one after poping the latest call site
+     */
     public long[] popLast() {
         long[] cs = this.callstring;
         long[] res = new long[GlobalState.config.getCallStringK()];
@@ -175,7 +206,6 @@ public class Context {
 
     /**
      * Taint argc and argv for main function
-     * @param absEnv
      */
     private void prepareMainAbsEnv(AbsEnv absEnv, Function mainFunction) {
         final long TAINT_ARGV_COUNT = 5;
@@ -229,6 +259,12 @@ public class Context {
         absEnv.set(spALoc, mainSP, true);
     }
 
+    /**
+     * Initialize necessary dataflow facts inside a created context
+     * @param caller New abstract environment before entrance into this context
+     * @param isMain Indicate whether this is a context for conventional "main" functions
+     * @return True if the abstract environment before the context entry has been changed, false otherwise 
+     */
     public boolean initContext(AbsEnv caller, boolean isMain) {
         Function callee = getFunction();
         Address entry = callee.getEntryPoint();
@@ -248,11 +284,19 @@ public class Context {
         return false;
     }
 
+    /**
+     * @hidden
+     * Insert an address into the worklist of this context
+     */
     public void insertToWorklist(Address addr) {
         Logging.debug("Add inst  @ " + Integer.toHexString((int) addr.getOffset()) + " in " + function.toString());
         worklist.push(addr);
     }
 
+    /**
+     * @hidden
+     * Iterative process for each address inside worklist of this context
+     */
     public void loop() {
         PcodeVisitor visitor = new PcodeVisitor(this);
         while (!worklist.isEmpty()) {
@@ -263,6 +307,9 @@ public class Context {
         }
     }
 
+    /**
+     * @hidden
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -276,11 +323,17 @@ public class Context {
         return false;
     }
 
+    /**
+     * @hidden
+     */
     @Override
     public int hashCode() {
         return function.hashCode() + Arrays.hashCode(this.callstring);
     }
 
+    /**
+     * @hidden
+     */
     @Override
     public String toString() {
         return function.toString() + "["
@@ -288,12 +341,18 @@ public class Context {
                 .collect(Collectors.joining(", ")) + "]";
     }
 
+    /**
+     * @hidden
+     */
     public static void resetPool() {
         pool.clear();
         active.clear();
         pending.clear();
     }
 
+    /**
+     * @hidden
+     */
     public static Context getEntryContext(Function entryFunction) {
         Context tmp = new Context(entryFunction);
         Context ctx = pool.get(tmp);
@@ -304,6 +363,9 @@ public class Context {
         return tmp;
     }
 
+    /**
+     * @hidden
+     */    
     public static Context getContext(Context prev, Address callSite, Function tf) {
         Context newCtx = new Context(tf);
         System.arraycopy(prev.callstring, 1, newCtx.callstring, 0, GlobalState.config.getCallStringK() - 1);
@@ -318,12 +380,18 @@ public class Context {
         return newCtx;
     }
 
+    /**
+     * @hidden
+     */
     public static Context getContext(Function tf, long[] callstring) { // only for return use
         Context newCtx = new Context(tf, callstring);
         return pool.get(newCtx);
     }
 
-    // TODO: refactor context pool to other data structure to make this faster
+    /**
+     * @hidden
+     * @deprecated Improper method for Context class, to be changed
+     */
     public static List<Context> getContext(Function function) {
         List<Context> res = new ArrayList<>();
         for (Context context : pool.keySet()) {
@@ -334,19 +402,25 @@ public class Context {
         return res;
     }
 
+    /**
+     * @hidden
+     */
     public static void pushActive(Context ctx) {
         if (!active.contains(ctx)) {
             active.push(ctx);
         }
     }
 
+    /**
+     * @hidden
+     */    
     public static void pushPending(Context ctx) {
         if (!pending.contains(ctx)) {
             pending.push(ctx);
         }
     }
 
-    protected static Context popActive() {
+    private static Context popActive() {
         if (active.isEmpty()) {
             return null;
         }
@@ -354,13 +428,16 @@ public class Context {
         return active.pop();
     }
 
-    protected static Context popPending() {
+    private static Context popPending() {
         if (pending.isEmpty()) {
             return null;
         }
         return pending.pop();
     }
 
+    /**
+     * @hidden
+     */
     public static Context popContext() {
         Context ctx = popActive();
         if (ctx == null) {
@@ -369,10 +446,17 @@ public class Context {
         return ctx;
     }
 
+    /**
+     * @hidden
+     */    
     public static boolean isWait(Context ctx) {
         return active.contains(ctx) || pending.contains(ctx);
     }
 
+    /**
+     * @hidden
+     * Main entry to drive interprocedural analysis with an entry context
+     */    
     public static void mainLoop(Context entryCtx) {
         current = entryCtx;
         while (current != null) {
@@ -384,6 +468,10 @@ public class Context {
         }
     }
 
+    /**
+     * @hidden
+     * Main entry to drive interprocedural analysis with an entry context and a timer
+     */    
     public static void mainLoopTimeout(Context entryCtx, long timeout) {
         Logging.info("Analyze started at " + java.time.LocalTime.now() + " with timout " + timeout + "s");
         Runnable task = () -> mainLoop(entryCtx);
@@ -399,4 +487,5 @@ public class Context {
         }
         executor.shutdown();
     }
+
 }

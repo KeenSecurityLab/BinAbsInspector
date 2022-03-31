@@ -6,7 +6,10 @@ import java.util.PriorityQueue;
 
 public class Worklist extends PriorityQueue<Address> {
 
-    static class WtoComparator implements Comparator<Address> {
+    /**
+    * Comparator for WTO in intraprocedrual worklist
+    */
+    static private class WtoComparator implements Comparator<Address> {
         private CFG cfg;
 
         public WtoComparator(CFG cfg) {
@@ -25,6 +28,9 @@ public class Worklist extends PriorityQueue<Address> {
         super(cfg.getSum(), new WtoComparator(cfg));
     }
 
+    /**
+    * Push a non-duplicate address
+    */
     public void push(Address addr) {
         assert (addr != null);
         if (!super.contains(addr)) {
@@ -32,6 +38,9 @@ public class Worklist extends PriorityQueue<Address> {
         }
     }
 
+    /**
+    * Popup the head element
+    */
     public Address pop() {
         return super.poll();
     }

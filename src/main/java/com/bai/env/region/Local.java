@@ -5,21 +5,32 @@ import java.util.Map;
 
 import ghidra.program.model.listing.Function;
 
-public class Local extends RegionBase { // AR region
+public class Local extends RegionBase {
 
     private Function function;
+
+    private static Map<Function, Local> pool = new HashMap<>();
+
+    /**
+     * @hidden
+     */
     public static final int DEFAULT_SIZE = 0x2800;
-    private static Map<Function, Local> pool = new HashMap<>(); // no duplicates
 
     private Local(Function function) {
         super(TYPE_LOCAL, DEFAULT_SIZE);
         this.function = function;
     }
 
+    /**
+     * Getter for the function of this Local region
+     */
     public Function getFunction() {
         return function;
     }
 
+    /**
+     * @hidden
+     */
     @Override
     public boolean equals(Object rhs) {
         if (this == rhs) {
@@ -36,15 +47,24 @@ public class Local extends RegionBase { // AR region
         return false;
     }
 
+    /**
+     * @hidden
+     */
     @Override
     public int hashCode() {
         return function.hashCode();
     }
 
+    /**
+     * @hidden
+     */    
     public static void resetPool() {
         pool.clear();
     }
 
+    /**
+     * Create a Local region for a given function
+     */
     public static Local getLocal(Function function) {
         Local oldLocal = pool.get(function);
         if (oldLocal != null) {
