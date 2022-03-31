@@ -1,5 +1,5 @@
 # Technical Details
-### Overview
+
 This document introduces some fundamental data structures, their relationship and how they work together.
 
 Our project is based on the theory of abstract interpretation with the help of Ghidra infrastructure. The basic question of abstract interpretation is to define abstract domains. More specifically, we need to abstract the runtime environment and transform it into abstract domains.
@@ -22,7 +22,7 @@ Abstract environments (AbsEnv) are core data structures to store the program sta
 ### Context
 Context is another fundamental data structure. It is based on call strings which are similar to call stacks but only recording K call sites. Therefore, for each callee function and its unique recent K call sites, there is a distinctive context. Contexts also accommodate abstract environments before and after each program point under different contexts, which means contexts are containers for abstract environments. Contexts can be transitioned between each other through call and return instructions. The transition relationship is recorded by another data structure called ContextTransitionTable into which new transition items are inserted for call instructions and from which existing transition items are queried for return instructions to archive context-sensitive interprocedural analysis.
 
-### Control flow graph (CFG)
+### Graph Structure
 Ghidra does not provide control flow graphs (CFG) and call graphs (CG) on hand, therefore we need to generate these graphs from flow information of Ghidra and call/return instructions. CFG nodes are based on each assembly instruction while CG node actually stand for each function. In fact, CFG nodes are another form of program points. Generally, graph data structures provide interfaces to query predecessors and successors. To be more specific, CFG also provides implementation to compute weak topological ordering (WTO) [2] and identify loop components.
 
 ### Worklist
