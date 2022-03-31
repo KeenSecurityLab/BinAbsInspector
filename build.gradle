@@ -105,7 +105,7 @@ javadoc {
 	exclude "com/bai/solver/PcodeVisitor.java"
 	exclude "com/bai/solver/Worklist.java"
 	exclude "com/bai/solver/ConstraintSolver.java"
-	exclude "com/bai/solver/Interval.java"
+	exclude "com/bai/env/Interval.java"
 
 	options.memberLevel = JavadocMemberLevel.PUBLIC
 	source = sourceSets.main.allJava

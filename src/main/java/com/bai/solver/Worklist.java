@@ -9,7 +9,7 @@ public class Worklist extends PriorityQueue<Address> {
     /**
     * Comparator for WTO in intraprocedrual worklist
     */
-    static private class WtoComparator implements Comparator<Address> {
+    private static class WtoComparator implements Comparator<Address> {
         private CFG cfg;
 
         public WtoComparator(CFG cfg) {

@@ -12,6 +12,7 @@ import java.util.Map;
 import org.javimmutable.collections.JImmutableSet;
 import org.javimmutable.collections.util.JImmutables;
 
+/** KSet */
 public class KSet implements Iterable<AbsVal> {
 
     private static JImmutableSet<AbsVal> TrueSet = JImmutables.set();
@@ -35,7 +36,7 @@ public class KSet implements Iterable<AbsVal> {
 
     protected long taints;
 
-   /**
+    /**
      * Constructor for an empty KSet
      * @param bits Bit width for this KSet
      */
@@ -43,7 +44,7 @@ public class KSet implements Iterable<AbsVal> {
         this(bits, 0);
     }
 
-   /**
+    /**
      * Constructor for an empty KSet with taint information
      * @param bits Bit width for this KSet
      * @param taints Taint bitmap for this KSet
@@ -65,7 +66,7 @@ public class KSet implements Iterable<AbsVal> {
         this.taints = obj.taints;
     }
 
-   /**
+    /**
      * Constructor with a specific set
      * @param kSet The underlying immutable set 
      * @param bits Bit width for this KSet
@@ -74,7 +75,7 @@ public class KSet implements Iterable<AbsVal> {
         this(kSet, bits, 0);
     }
 
-   /**
+    /**
      * Constructor with a specific set and taint information
      * @param kSet The underlying immutable set 
      * @param bits Bit width for this KSet
@@ -137,7 +138,7 @@ public class KSet implements Iterable<AbsVal> {
      * Get a True KSet with taint information
      * @param taints Taint bitmap for this Top
      * @return True object with taint bitmap
-     */    
+     */
     public static KSet getTrue(long taints) {
         KSet res = trueMap.get(taints);
         if (res == null) {
@@ -151,7 +152,7 @@ public class KSet implements Iterable<AbsVal> {
      * Get a False KSet with taint information
      * @param taints Taint bitmap for this Top
      * @return False object with taint bitmap
-     */   
+     */
     public static KSet getFalse(long taints) {
         KSet res = falseMap.get(taints);
         if (res == null) {
@@ -165,7 +166,7 @@ public class KSet implements Iterable<AbsVal> {
      * Get a Unknown KSet with taint information
      * @param taints Taint bitmap for this Top
      * @return Unknown object with taint bitmap
-     */ 
+     */
     public static KSet getUnknown(long taints) {
         KSet res = unknownMap.get(taints);
         if (res == null) {
@@ -180,7 +181,7 @@ public class KSet implements Iterable<AbsVal> {
      * Check whether the corresponding bit in taint bitmap is set or not
      * @param sourceId Indicate which taint number to be checked
      * @return Check result
-     */     
+     */
     public boolean checkTaints(int sourceId) {
         assert (sourceId >= 0 && sourceId < 64);
 

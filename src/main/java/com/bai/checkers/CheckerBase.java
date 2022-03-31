@@ -11,6 +11,9 @@ import ghidra.program.model.pcode.Varnode;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The base class for all checkers.
+ */
 public abstract class CheckerBase {
 
     protected String cwe;

@@ -41,6 +41,9 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.ArrayUtils;
 import org.javimmutable.collections.JImmutableMap.Entry;
 
+/**
+ * String utilities.
+ */
 public class StringUtils {
 
     private static final int DEFAULT_LEN = 0x10;

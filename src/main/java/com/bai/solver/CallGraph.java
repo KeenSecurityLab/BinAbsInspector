@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
+/** Call graph */
 public class CallGraph extends GraphBase<Function> {
 
     private Function entryFunction;
