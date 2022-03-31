@@ -204,7 +204,8 @@ public class ConstraintSolverTest extends ARMProgramTestBase {
         ConstraintSolver constraintSolver = new ConstraintSolver();
         constraintSolver.visit_INT_NOTEQUAL(pcode, tmpEnv);
         BoolExpr constrain = constraintSolver.getConstraints()[0];
-        Assert.assertEquals(constrain.toString(), "(not (= (= bv_0 bv_1) bool_2))");
+        Assert.assertTrue("(not (= (= bv_0 bv_1) bool_2))".equals(constrain.toString())
+                || "(= (not (= bv_0 bv_1)) bool_2)".equals(constrain.toString()));
     }
 
     @Test

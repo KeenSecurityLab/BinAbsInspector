@@ -82,6 +82,11 @@ tasks.withType(Test) {
 	maxHeapSize = "2G"
 	testLogging {
 		events "passed", "skipped", "failed"
+		showExceptions true
+		exceptionFormat "full"
+		showCauses true
+		showStackTraces true
+		showStandardStreams = false
 	}
 	systemProperty "debug", "1"
 	finalizedBy jacocoTestReport

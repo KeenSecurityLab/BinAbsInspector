@@ -9,8 +9,8 @@ We use Gradle to manage dependencies and test tasks. You can use IntelliJ IDEA o
 	+ Tested version 10.1.2
 + Setup environemnt variable `GHIDRA_INSTALL_DIR` to your Ghidra install path, here is references for [Windows](https://docs.oracle.com/en/database/oracle/machine-learning/oml4r/1.5.1/oread/creating-and-modifying-environment-variables-on-windows.html#GUID-DD6F9982-60D5-48F6-8270-A27EC53807D0) , [Linux](https://linuxize.com/post/how-to-set-and-list-environment-variables-in-linux/), [macOS](https://phoenixnap.com/kb/set-environment-variable-mac).
 + Install Z3
-	+ Tested version 4.8.14
-	+ We've including a java binding library for 4.8.14 at ./lib/com.microsoft.z3.jar, you need to install pre-built z3 library of same version from https://github.com/Z3Prover/z3/releases/tag/z3-4.8.14.
+	+ Tested version 4.8.15
+	+ We've including a java binding library for 4.8.15 at ./lib/com.microsoft.z3.jar, you need to install pre-built z3 library of same version from https://github.com/Z3Prover/z3/releases/tag/z3-4.8.15.
 	+ Or you can build and install a fresh Z3 library according to the steps from: [Z3 Readme](https://github.com/Z3Prover/z3), and copy the generated java binding package (com.microsoft.z3.jar) to ./lib
 ### For Intellj IDEA
 + It is recommended to use intellij-ghidra plugin for testing and debugging: [intellj-ghidra](https://github.com/garyttierney/intellij-ghidra)
@@ -186,9 +186,9 @@ public static final Map<String, CheckerBase> CHECKER_MAP = Map.ofEntries(
 );
 ```
 ### Step 4: Run the checker
-Now a new checker is born, you can try to run it with following command line:
+Now a new checker is born, you can try to run it with following argument in `intellj-ghidra`:
 ```
-analyzeHeadless <project_name> -import <binary> -postScript BinAbsInspector.java "@@-check CWE134" -scriptPath <scriptPath>
+<projectPath> <projectName> -import <binary> -scriptPath <scriptPath> -postScript BinAbsInspector.java "@@-check CWE134"
 ```
 
 
