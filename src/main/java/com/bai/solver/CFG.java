@@ -15,7 +15,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-
+/**
+ * The control flow graph of a function.
+ */
 public class CFG extends GraphBase<Address> {
     
     private Function f;
@@ -181,7 +183,7 @@ public class CFG extends GraphBase<Address> {
     }
 
     /**
-     * Get WTO for each address in this CFG
+     * Get WTO (Weak Topological Ordering) for each address in this CFG
      * @return The WTO map for each address of this CFG
      */ 
     public Map<Address, Integer> getWTOMap() {

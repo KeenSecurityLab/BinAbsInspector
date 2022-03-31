@@ -3,6 +3,9 @@ package com.bai.env.region;
 import com.bai.env.ALoc;
 import com.bai.util.GlobalState;
 
+/**
+ * Register region.
+ */
 public class Reg extends RegionBase {
     private Reg() {
         super(TYPE_REG, -1L);

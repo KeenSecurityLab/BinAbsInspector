@@ -7,7 +7,11 @@ import java.util.Map;
 import ghidra.program.model.address.Address;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 
-public class Heap extends RegionBase { // malloc region, allocation site sensitive with malloc context
+/**
+ * Heap region.
+ * Allocation site sensitive with malloc context.
+ */
+public class Heap extends RegionBase {
 
     private final Address allocAddress;
 

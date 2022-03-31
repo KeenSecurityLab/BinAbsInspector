@@ -12,6 +12,9 @@ import org.javimmutable.collections.Holder;
 import org.javimmutable.collections.JImmutableMap.Entry;
 import org.javimmutable.collections.tree.JImmutableTreeMap;
 
+/**
+ * Abstract Environment
+ */
 public class AbsEnv {
 
     private JImmutableTreeMap<ALoc, KSet> envMap;

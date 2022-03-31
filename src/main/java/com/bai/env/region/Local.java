@@ -5,6 +5,10 @@ import java.util.Map;
 
 import ghidra.program.model.listing.Function;
 
+/**
+ * Local (stack) region.
+ * Represent stack memory for each function.
+ */
 public class Local extends RegionBase {
 
     private Function function;

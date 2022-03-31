@@ -1,5 +1,9 @@
 package com.bai.env.region;
 
+/**
+ * Unique Region.
+ * Contains all unique (temporary) variables created by Ghidra.
+ */
 public class Unique extends RegionBase {
     private Unique() {
         super(TYPE_UNIQUE, -1L);

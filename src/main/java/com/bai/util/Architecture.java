@@ -8,6 +8,9 @@ import ghidra.program.model.address.Address;
 import ghidra.program.model.lang.Register;
 import ghidra.program.model.listing.Program;
 
+/**
+ * The Architecture specific utilities.
+ */
 public class Architecture {
     // from: https://github.com/NationalSecurityAgency/ghidra/blob/master/Ghidra/Processors/ARM/data/languages/ARM.sinc#L10
     private static final int[] ARMV7_FLAG_INDEXES = {

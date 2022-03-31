@@ -14,6 +14,9 @@ import com.bai.solver.CFG;
 
 import ghidra.program.flatapi.FlatProgramAPI;
 
+/**
+ * Global state of current analysis.
+ */
 public class GlobalState {
 
     public static Program currentProgram;

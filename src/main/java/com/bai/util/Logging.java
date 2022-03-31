@@ -11,6 +11,9 @@ import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.ConfigurationSource;
 import org.apache.logging.log4j.core.config.xml.XmlConfiguration;
 
+/**
+ * Logging class.
+ */
 public class Logging {
 
     private static final String DEFAULT_LOGGER_NAME = "BinAbsInspector";

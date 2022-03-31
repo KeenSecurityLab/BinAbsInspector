@@ -5,7 +5,9 @@ import com.bai.env.Context;
 import com.bai.util.GlobalState;
 import ghidra.program.model.listing.Function;
 
-
+/**
+ * The class for interprocedural analysis.
+ */
 public class InterSolver {
 
     private Function entry;

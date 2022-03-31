@@ -7,6 +7,9 @@ import ghidra.program.model.listing.Function;
 import java.util.Objects;
 import org.apache.logging.log4j.message.Message;
 
+/**
+ * The report of a CWE warning.
+ */
 public class CWEReport implements Message {
 
     private String cwe;
