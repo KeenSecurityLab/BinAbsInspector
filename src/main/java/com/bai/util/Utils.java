@@ -41,6 +41,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.javimmutable.collections.JImmutableMap.Entry;
 
+/**
+ * Utilities.
+ */
 public class Utils {
 
     private static boolean setFunctionName(Address entryAddress, String functionName) {

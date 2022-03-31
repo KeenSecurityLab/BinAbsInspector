@@ -174,16 +174,6 @@ public abstract class GraphBase<T> {
     }
 
     /**
-     * Return a list of the node's predecessors
-     * @param value the node value
-     * @return Return a list of the node's predecessors
-     */
-    public List<T> getPreds(T value) {
-        Node tmp = getNode(value);
-        return new LinkedList<>(tmp.in);
-    }
-
-    /**
      * Return an array of the node's successors
      * @param id the node's id
      * @return Return an array of the node's successors
@@ -199,6 +189,16 @@ public abstract class GraphBase<T> {
             res[i++] = nodeToIdMap.get(t);
         }
         return res;
+    }
+
+    /**
+     * Return a list of the node's predecessors
+     * @param value the node value
+     * @return Return a list of the node's predecessors
+     */
+    public List<T> getPreds(T value) {
+        Node tmp = getNode(value);
+        return new LinkedList<>(tmp.in);
     }
 
     /**

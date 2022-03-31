@@ -3,6 +3,7 @@ package com.bai.env;
 import java.math.BigInteger;
 import java.util.Objects;
 
+/** The interval for constraint solving result. */
 public class Interval {
 
     private long lower;

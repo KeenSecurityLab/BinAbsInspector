@@ -9,6 +9,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Configuration class.
+ */
 public class Config {
 
     /**

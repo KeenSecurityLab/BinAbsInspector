@@ -739,9 +739,6 @@ public class PcodeVisitor {
     }
 
     /**
-     * Note: From document, Input0 is "Varnode containing offset of next instruction".
-     * But it actually contains an function address in real scenario, haven't meet the case of offset so far.
-     *
      * @param pcode
      * @param inOutEnv
      * @param tmpEnv
@@ -789,7 +786,7 @@ public class PcodeVisitor {
         Set<Context> targets = new HashSet<>();
         Context pending = context;
 
-        for (Pair<Function, Address> pair: functionSet) {
+        for (Pair<Function, Address> pair : functionSet) {
             Function callee = pair.getLeft();
             Address targetAddress = pair.getRight();
             Status status;

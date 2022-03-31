@@ -2,6 +2,9 @@ package com.bai.env.region;
 
 import com.bai.util.GlobalState;
 
+/**
+ * The base class of all regions.
+ */
 public abstract class RegionBase {
 
     protected int kind;
@@ -86,17 +89,17 @@ public abstract class RegionBase {
     }
 
     /**
-     * Getter for the base of this region
-     */
-    public long getBase() {
-        return base;
-    }
-
-    /**
      * Getter for the region kind
      */
     public int getKind() {
         return kind;
+    }
+
+    /**
+     * Getter for the base of this region
+     */
+    public long getBase() {
+        return base;
     }
 
     // thread-unsafe

@@ -5,6 +5,7 @@ import com.bai.env.region.RegionBase;
 import com.bai.util.GlobalState;
 import java.math.BigInteger;
 
+/** Abstract Value */
 public class AbsVal {
 
     protected RegionBase region;

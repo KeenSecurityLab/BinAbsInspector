@@ -5,7 +5,7 @@ import com.bai.util.Logging;
 import java.util.Map;
 
 /**
- *
+ * CheckerManager.
  */
 public class CheckerManager {
 

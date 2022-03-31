@@ -51,7 +51,8 @@ public class ContextTransitionTable {
     /**
      * Get possible call strings for callers after return instructions are processed
      * @param callSite Last element in the current call string (i.e., the callsite for current callee)
-     * @param callString Partial call string for the above callsite. Valid addresses for known array indexes, zeroes otherwise.
+     * @param callString Partial call string for the above callsite.
+     *                   Valid addresses for known array indexes, zeroes otherwise.
      * @return A set of possible call strings queried from context transition record, null is possible
      */
     public Set<long[]> get(Address callSite, long[] callString) {

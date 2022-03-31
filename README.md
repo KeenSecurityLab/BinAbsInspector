@@ -1,6 +1,6 @@
 # What is  BinAbsInspector?
 
-BinAbsInspector is a static analyzer for automated reverse engineering and scanning vulnerabilities in binaries, which is a long-term research project incubated at [Keenlab](https://keenlab.tencent.com/). It is based on abstract interpretation with the support from Ghidra. It works on Ghidra's Pcode instead of assembly. Currently it supports binaries on x86,x64, armv7 and aarch64. 
+BinAbsInspector (Binary Abstract Inspector) is a static analyzer for automated reverse engineering and scanning vulnerabilities in binaries, which is a long-term research project incubated at [Keenlab](https://keenlab.tencent.com/). It is based on abstract interpretation with the support from Ghidra. It works on Ghidra's Pcode instead of assembly. Currently it supports binaries on x86,x64, armv7 and aarch64. 
 
 # Installation
 + Install Ghidra according to [Ghidra's documentation](https://github.com/NationalSecurityAgency/ghidra#install)
@@ -34,12 +34,12 @@ $GHIDRA_INSTALL_DIR/support/analyzeHeadless <projectPath> <projectName> -import 
 
 | Parameter                                 | Description                           |
 | ----------------------------------------- | --------------------------------------|
-| `[-K <kElement>]`                         | KSet size                             |
-| `[-callStringK <callStringMaxLen>]`       | Call string maximum length            |
-| `[-Z3Timeout] <timeout>`                  | Z3 timeout                            |
-| `[-timeout] <timeout>`                    | Analysis timeout                      |
-| `[-entry] <address>`                      | Entry address                         |
-| `[-externalMap] <file>`                   | External function model config        |
+| `[-K <kElement>]`                         | KSet size limit [K](./doc/technical_details.md#KSet)             |
+| `[-callStringK <callStringMaxLen>]`       | Call string maximum length [K](./doc/technical_details.md#Context)|
+| `[-Z3Timeout <timeout>]`                  | Z3 timeout                            |
+| `[-timeout <timeout>]`                    | Analysis timeout                      |
+| `[-entry <address>]`                      | Entry address                         |
+| `[-externalMap <file>]`                   | External function model config        |
 | `[-json]`                                 | Output in json format                 |
 | `[-disableZ3]`                            | Disable Z3                            |
 | `[-all]`                                  | Enable all checkers (by default)      |
@@ -95,6 +95,8 @@ The structure of this project is as follows, please refer to [technical details]
 │   └── resources
 └── test
 ```
+You can also build the javadoc with `gradle javadoc`, the API documentation will be generated in `./build/docs/javadoc`.
+
 # Acknowledgement
 We employ [Ghidra](https://ghidra-sre.org/) as our foundation and frequently leverage [JImmutable Collections](http://brianburton.github.io/java-immutable-collections/) for better performance.  
 Here we would like to thank them for their great help!
