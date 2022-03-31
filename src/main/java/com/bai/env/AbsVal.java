@@ -110,7 +110,11 @@ public class AbsVal {
         return value - region.getBase();
     }
 
-    protected boolean isZero() {
+    /**
+     * @hidden
+     * @deprecated Method with ambiguous semantics, to be changed
+     */
+    public boolean isZero() {
         if (bigVal != null) {
             return bigVal.signum() == 0;
         } else {

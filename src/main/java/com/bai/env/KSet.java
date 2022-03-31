@@ -381,7 +381,7 @@ public class KSet implements Iterable<AbsVal> {
         return BigInteger.ONE.shiftLeft(bits).subtract(BigInteger.ONE);
     }
 
-    protected static boolean isShiftExceedBits(AbsVal op) {
+    protected boolean isShiftExceedBits(AbsVal op) {
         return op.bigVal != null || (op.value >= bits || op.value < 0);
     }
 

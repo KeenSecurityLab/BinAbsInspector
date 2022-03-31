@@ -214,7 +214,7 @@ public class PcodeVisitor {
                 {ImmutablePair.of(takenAddress, inOutEnv),
                         ImmutablePair.of(fallThroughAddress, inOutEnv)};
 
-        Function currentFunction = Context.current.getFunction();
+        Function currentFunction = context.getFunction();
         if (!GlobalState.config.isEnableZ3()
                 || currentFunction == null
                 || !CFG.getCFG(currentFunction).isInLoop(address)) {
