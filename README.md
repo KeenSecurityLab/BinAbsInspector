@@ -14,7 +14,7 @@ BinAbsInspector (Binary Abstract Inspector) is a static analyzer for automated r
 + Install the extension according to [Ghidra Extension Notes](https://ghidra-sre.org/InstallationGuide.html#GhidraExtensionNotes)
 
 # Building
-Build the extension by your self, if you want to develop a new feature, please refer to [developing guide](./doc/developer_guide.md).
+Build the extension by yourself, if you want to develop a new feature, please refer to [developing guide](./doc/developer_guide.md).
 + Install Ghidra and Z3
 + Install [Gradle 7.x](https://gradle.org/releases/) (tested version: 7.4)
 + Pull the repository
