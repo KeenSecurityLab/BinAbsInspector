@@ -208,18 +208,17 @@ public class Context {
     /**
      * Taint argc and argv for main function
      */
-    private void prepareMainAbsEnv(AbsEnv absEnv, Function mainFunction) {
+    public void prepareMainAbsEnv(AbsEnv absEnv, Function mainFunction) {
         final long TAINT_ARGV_COUNT = 5;
         Utils.defineMainFunctionSignature(mainFunction);
 
-        Function startFunction = GlobalState.currentProgram.getListing().getGlobalFunctions("_start").get(0);
-        Local startLocal = Local.getLocal(startFunction);
+        Local entryLocal = Local.getLocal(GlobalState.eEntryFunction);
 
-        oldSpKSet = oldSpKSet.insert(AbsVal.getPtr(startLocal));
+        oldSpKSet = oldSpKSet.insert(AbsVal.getPtr(entryLocal));
         // Temporarily set sp point to start
         ALoc spALoc = ALoc.getSPALoc();
         final KSet mainSP = absEnv.get(spALoc);
-        KSet tmpSP = new KSet(GlobalState.arch.getDefaultPointerSize() * 8).insert(AbsVal.getPtr(startLocal));
+        KSet tmpSP = new KSet(GlobalState.arch.getDefaultPointerSize() * 8).insert(AbsVal.getPtr(entryLocal));
         absEnv.set(spALoc, tmpSP, true);
 
         // Set argc to TOP
@@ -230,7 +229,7 @@ public class Context {
         }
         ALoc argcALoc = argcALocs.get(0);
         if (argcALoc.getRegion().isLocal()) {
-            argcALoc = ALoc.getALoc(startLocal, argcALoc.getBegin(), argcALoc.getLen());
+            argcALoc = ALoc.getALoc(entryLocal, argcALoc.getBegin(), argcALoc.getLen());
         }
         absEnv.set(argcALoc, KSet.getTop(), true);
 
@@ -243,18 +242,18 @@ public class Context {
         ALoc argvALoc = argvALocs.get(0);
         long offset;
         if (argvALoc.getRegion().isLocal()) {
-            argvALoc = ALoc.getALoc(startLocal, argvALoc.getBegin(), argcALoc.getLen());
+            argvALoc = ALoc.getALoc(entryLocal, argvALoc.getBegin(), argcALoc.getLen());
             offset = argvALoc.getBegin() + argvALoc.getLen();
         } else {
-            offset = startLocal.getBase();
+            offset = entryLocal.getBase();
         }
-        long taints = TaintMap.getTaints(this, startFunction);
+        long taints = TaintMap.getTaints(this, GlobalState.eEntryFunction);
         int unit = GlobalState.arch.getDefaultPointerSize();
         for (int i = 0; i < TAINT_ARGV_COUNT; i++) {
-            absEnv.set(ALoc.getALoc(startLocal, offset + ((long) i * unit), unit), KSet.getTop(taints), true);
+            absEnv.set(ALoc.getALoc(entryLocal, offset + ((long) i * unit), unit), KSet.getTop(taints), true);
         }
 
-        KSet argvPtrKSet = new KSet(argvALoc.getLen() * 8).insert(AbsVal.getPtr(startLocal, offset));
+        KSet argvPtrKSet = new KSet(argvALoc.getLen() * 8).insert(AbsVal.getPtr(entryLocal, offset));
         absEnv.set(argvALoc, argvPtrKSet, true);
         // reset sp
         absEnv.set(spALoc, mainSP, true);

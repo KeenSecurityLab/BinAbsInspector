@@ -11,6 +11,7 @@ import com.bai.env.funcs.externalfuncs.FscanfFunction;
 import com.bai.env.funcs.externalfuncs.GetcFunction;
 import com.bai.env.funcs.externalfuncs.GetenvFunction;
 import com.bai.env.funcs.externalfuncs.GetsFunction;
+import com.bai.env.funcs.externalfuncs.LibcStartMainFunction;
 import com.bai.env.funcs.externalfuncs.MallocFunction;
 import com.bai.env.funcs.externalfuncs.MemcpyFunction;
 import com.bai.env.funcs.externalfuncs.PrintfFunction;
@@ -47,6 +48,7 @@ import java.util.regex.Pattern;
 public class FunctionModelManager {
 
     private static final List<ExternalFunctionBase> EXTERNAL_FUNCTION_LIST = List.of(
+            new LibcStartMainFunction(),
             new TopResultFunction(),
             // Heap function
             new MallocFunction(),

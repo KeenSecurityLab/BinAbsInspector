@@ -1,4 +1,5 @@
 import com.bai.env.funcs.FunctionModelManager;
+import com.bai.util.Utils;
 import ghidra.app.plugin.core.analysis.AutoAnalysisManager;
 import ghidra.app.util.importer.AutoImporter;
 import ghidra.app.util.importer.MessageLog;
@@ -43,6 +44,7 @@ public abstract class IntegrationTestBase extends AbstractGhidraHeadlessIntegrat
         }
         program.endTransaction(tid, true);
         GlobalState.arch = new Architecture(program);
+        GlobalState.eEntryFunction = Utils.getEntryFunction();
         return program;
     }
 
