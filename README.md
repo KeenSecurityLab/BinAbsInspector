@@ -77,7 +77,7 @@ So far BinAbsInspector supports following checkers:
 + [CWE676](https://cwe.mitre.org/data/definitions/676.html) (Use of Potentially Dangerous Function)
 + [CWE787](https://cwe.mitre.org/data/definitions/787.html) (Buffer Overflow (Out-of-bounds Write))
 
-# Developing
+# Directory Structure
 The structure of this project is as follows, please refer to [technical details](./doc/technical_details.md) for more details.
 ```
 ├── main
