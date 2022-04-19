@@ -8,6 +8,7 @@ import com.bai.env.funcs.FunctionModelManager;
 import com.bai.env.region.Heap;
 import com.bai.env.region.Local;
 import ghidra.app.script.GhidraScript;
+import ghidra.program.model.listing.Function;
 import ghidra.program.model.listing.Program;
 
 import com.bai.solver.CFG;
@@ -28,6 +29,9 @@ public class GlobalState {
     public static GhidraScript ghidraScript;
 
     public static Architecture arch;
+
+    /** e_entry from ELF header **/
+    public static Function eEntryFunction;
 
     /**
      * @hidden

@@ -42,7 +42,6 @@ public class CWE134 extends CheckerBase {
             "vprintf", 0,
             "vfprintf", 1
     );
-    private static final String startSymbol = "_start";
 
     private static boolean isAbsValWriteable(AbsVal ptr) {
         RegionBase region = ptr.getRegion();
@@ -60,8 +59,8 @@ public class CWE134 extends CheckerBase {
         return false;
     }
 
-    private boolean isTaintSourceFromStart(Source source) {
-        return source.getFunction().getName().equals(startSymbol);
+    private boolean isTaintSourceFromEntry(Source source) {
+        return source.getFunction().equals(GlobalState.eEntryFunction);
     }
 
     private boolean checkFunctionParameters(Context context, AbsEnv absEnv, Function callee, Address address) {
@@ -78,7 +77,7 @@ public class CWE134 extends CheckerBase {
             long taints = argKSet.getTaints();
             List<Source> taintSourceList = TaintMap.getTaintSourceList(taints);
             for (TaintMap.Source taintSource : taintSourceList) {
-                if (isTaintSourceFromStart(taintSource)) {
+                if (isTaintSourceFromEntry(taintSource)) {
                     Logging.debug("*argv appears in argument!");
                     CWEReport report = getNewReport(
                             "Potentially externally controlled format string from source of \"argv\" to \""

@@ -8,7 +8,11 @@ import com.bai.env.KSet;
 import com.bai.env.funcs.FunctionModelManager;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import generic.continues.RethrowContinuesFactory;
 import ghidra.app.cmd.function.ApplyFunctionSignatureCmd;
+import ghidra.app.util.bin.MemoryByteProvider;
+import ghidra.app.util.bin.format.elf.ElfException;
+import ghidra.app.util.bin.format.elf.ElfHeader;
 import ghidra.program.model.address.Address;
 import ghidra.program.model.data.FunctionDefinitionDataType;
 import ghidra.program.model.data.IntegerDataType;
@@ -333,5 +337,26 @@ public class Utils {
                         .noneMatch(reference -> reference.getReferenceType() == RefType.THUNK))
                 .flatMap(symbol -> Arrays.stream(symbol.getReferences()))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Get the entry function of this ELF executable.
+     * @return
+     */
+    public static Function getEntryFunction() {
+        try {
+            MemoryByteProvider provider = new MemoryByteProvider(GlobalState.currentProgram.getMemory(),
+                    GlobalState.currentProgram.getMinAddress());
+            ElfHeader header = ElfHeader.createElfHeader(RethrowContinuesFactory.INSTANCE, provider);
+            Address entryAddress = GlobalState.flatAPI.toAddr(header.e_entry());
+            if (entryAddress.subtract(GlobalState.currentProgram.getImageBase()) < 0) {
+                // handle PIE ELF with non-zero base address
+                entryAddress = entryAddress.add(GlobalState.currentProgram.getImageBase().getOffset());
+            }
+            return GlobalState.flatAPI.getFunctionAt(entryAddress);
+        } catch (ElfException e) {
+            Logging.error("Unsupported file format.");
+            return null;
+        }
     }
 }

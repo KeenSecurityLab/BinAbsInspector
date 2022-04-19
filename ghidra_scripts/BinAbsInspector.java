@@ -83,18 +83,17 @@ public class BinAbsInspector extends GhidraScript {
             Address entryAddress = GlobalState.flatAPI.toAddr(entryAddressStr);
             return analyzeFromAddress(entryAddress);
         } else {
+            GlobalState.eEntryFunction = Utils.getEntryFunction();
+            if (GlobalState.eEntryFunction == null) {
+                Logging.error("Cannot find entry function, maybe unsupported file format or corrupted header.");
+                return false;
+            }
             if (!analyzeFromMain()) {
                 Logging.info("Start from entrypoint");
-                try {
-                    MemoryByteProvider provider = new MemoryByteProvider(GlobalState.currentProgram.getMemory(),
-                            GlobalState.currentProgram.getMinAddress());
-                    ElfHeader header = ElfHeader.createElfHeader(RethrowContinuesFactory.INSTANCE, provider);
-                    Address entryAddress = GlobalState.flatAPI.toAddr(header.e_entry());
-                    return analyzeFromAddress(entryAddress);
-                } catch (ElfException e) {
-                    Logging.error("Unsupported file format.");
-                    return false;
-                }
+                Logging.info("Running solver on \"" + GlobalState.eEntryFunction + "()\" function");
+                InterSolver solver = new InterSolver(GlobalState.eEntryFunction, false);
+                solver.run();
+                return true;
             }
         }
         return true;
