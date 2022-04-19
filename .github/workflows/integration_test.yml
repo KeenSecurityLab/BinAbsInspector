@@ -47,8 +47,7 @@ jobs:
       - name: Checkout binaries
         uses: actions/checkout@v3
         with:
-          repository: MatthewShao/BinAbsInspector-binaries
-          token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
+          repository: KeenSecurityLab/BinAbsInspector-binaries
           path: src/integration/resources/binaries
       - name: Integration test
         uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
