@@ -1,6 +1,6 @@
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.env.region.Reg;
 import com.bai.util.GlobalState;
@@ -35,7 +35,7 @@ public class CppVectorTest extends IntegrationTestBase {
         Program program = prepareProgram(file);
         analyzeFromMain(program);
         Function mainFunction = program.getListing().getGlobalFunctions("main").get(0);
-        Context mainContext = Context.getContext(mainFunction).get(0);
+        context mainContext = context.getContext(mainFunction).get(0);
         AbsEnv absEnv = mainContext.getValueBefore(GlobalState.flatAPI.toAddr(0x10864));
         KSet r0KSet = absEnv.get(Reg.getALoc("r1"));
         KSet expect = new KSet(32)

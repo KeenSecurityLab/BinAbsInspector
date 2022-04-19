@@ -3,7 +3,7 @@ package com.bai.env.funcs.externalfuncs;
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import ghidra.program.model.data.IntegerDataType;
 import ghidra.program.model.data.PointerDataType;
@@ -26,7 +26,7 @@ public class AtoiFunction extends ExternalFunctionBase {
     }
 
     @Override
-    public void invoke(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, Context context, Function callFunc) {
+    public void invoke(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, context context, Function callFunc) {
         ALoc retALoc = getReturnALoc(callFunc, false);
         if (retALoc == null) {
             return;

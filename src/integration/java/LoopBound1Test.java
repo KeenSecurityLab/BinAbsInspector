@@ -1,7 +1,7 @@
 import ghidra.program.model.listing.Program;
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.env.region.Reg;
 import com.bai.util.GlobalState;
@@ -62,7 +62,7 @@ public class LoopBound1Test {
         @Test
         public void test_loop() {
             analyzeFromMain(program);
-            for (Context ctx : Context.getPool().keySet()) {
+            for (context ctx : context.getPool().keySet()) {
                 Logging.debug(ctx.toString());
 
             }
@@ -72,7 +72,7 @@ public class LoopBound1Test {
         }
 
         private void check_loop1() {
-            Context context = Context.getContext(GlobalState.flatAPI.getFunctionAt(GlobalState.flatAPI.toAddr(0x10400)))
+            context context = com.bai.env.context.getContext(GlobalState.flatAPI.getFunctionAt(GlobalState.flatAPI.toAddr(0x10400)))
                     .get(0);
             AbsEnv absEnv = context.getValueBefore(GlobalState.flatAPI.toAddr(0x10424));
             KSet r1KSet = absEnv.get(Reg.getALoc("r1"));
@@ -84,7 +84,7 @@ public class LoopBound1Test {
         }
 
         private void check_loop2() {
-            Context context = Context.getContext(GlobalState.flatAPI.getFunctionAt(GlobalState.flatAPI.toAddr(0x10450)))
+            context context = com.bai.env.context.getContext(GlobalState.flatAPI.getFunctionAt(GlobalState.flatAPI.toAddr(0x10450)))
                     .get(0);
             AbsEnv absEnv = context.getValueBefore(GlobalState.flatAPI.toAddr(0x10480));
             KSet r1KSet = absEnv.get(Reg.getALoc("r1"));
@@ -119,7 +119,7 @@ public class LoopBound1Test {
         @Test
         public void test_loop() {
             analyzeFromMain(program);
-            for (Context ctx : Context.getPool().keySet()) {
+            for (context ctx : context.getPool().keySet()) {
                 Logging.debug(ctx.toString());
 
             }
@@ -129,7 +129,7 @@ public class LoopBound1Test {
         }
 
         private void check_loop2() {
-            Context context = Context.getContext(
+            context context = com.bai.env.context.getContext(
                     GlobalState.flatAPI.getFunctionAt(GlobalState.flatAPI.toAddr(0x100683))).get(0);
             AbsEnv absEnv = context.getValueBefore(GlobalState.flatAPI.toAddr(0x1006b0));
             KSet rsiKSet = absEnv.get(Reg.getALoc("RSI"));

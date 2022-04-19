@@ -2,7 +2,7 @@ package com.bai.checkers;
 
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.solver.CallGraph;
 import com.bai.util.CWEReport;
@@ -158,7 +158,7 @@ public class CWE676 extends CheckerBase {
                 }
                 // Now we process the more complex case of `std::cin >>`
                 // Get the list of contexts for the current function
-                for (Context context : Context.getContext(caller)) {
+                for (com.bai.env.context context : context.getContext(caller)) {
                     AbsEnv absEnv = context.getAbsEnvIn().get(fromAddress);
                     if (absEnv == null) {
                         continue;

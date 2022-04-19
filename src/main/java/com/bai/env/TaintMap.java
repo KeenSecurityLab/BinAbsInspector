@@ -18,15 +18,15 @@ public class TaintMap {
      */
     public static class Source {
 
-        private final Context context;
+        private final com.bai.env.context context;
         private final Function function;
 
-        public Source(Context context, Function function) {
+        public Source(com.bai.env.context context, Function function) {
             this.context = context;
             this.function = function;
         }
 
-        public Context getContext() {
+        public com.bai.env.context getContext() {
             return context;
         }
 
@@ -64,7 +64,7 @@ public class TaintMap {
         taintSourceToIdMap.clear();
     }
 
-    protected static int getTaintId(Context context, Function function) {
+    protected static int getTaintId(context context, Function function) {
         if (taintId >= MAX_TAINT_CNT) {
             Logging.error("Taint id number reach " + MAX_TAINT_CNT
                     + "this may lead to false positive.");
@@ -103,7 +103,7 @@ public class TaintMap {
      * @param function Function component for a taint source
      * @return A taint bitmap for the information of a taint source
      */
-    public static long getTaints(Context context, Function function) {
+    public static long getTaints(context context, Function function) {
         return 1L << getTaintId(context, function);
     }
 

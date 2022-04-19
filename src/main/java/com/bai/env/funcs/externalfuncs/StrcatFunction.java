@@ -4,7 +4,7 @@ package com.bai.env.funcs.externalfuncs;
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import ghidra.program.model.data.PointerDataType;
 import ghidra.program.model.listing.Function;
@@ -32,7 +32,7 @@ public class StrcatFunction extends ExternalFunctionBase {
         return staticSymbols;
     }
 
-    public void invoke(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, Context context, Function callFunc) {
+    public void invoke(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, context context, Function callFunc) {
         ALoc retALoc = getReturnALoc(callFunc, false);
         KSet dstPtrKSet = getParamKSet(callFunc, 0, inOutEnv);
         KSet srcPtrKSet = getParamKSet(callFunc, 1, inOutEnv);

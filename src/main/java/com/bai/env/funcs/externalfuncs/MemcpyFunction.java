@@ -3,7 +3,7 @@ package com.bai.env.funcs.externalfuncs;
 
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import ghidra.program.model.data.IntegerDataType;
 import ghidra.program.model.data.PointerDataType;
@@ -31,7 +31,7 @@ public class MemcpyFunction extends ExternalFunctionBase {
     }
 
     @Override
-    public void invoke(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, Context context, Function calleeFunc) {
+    public void invoke(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, context context, Function calleeFunc) {
         KSet dstPtrKSet = getParamKSet(calleeFunc, 0, inOutEnv);
         KSet srcPtrKSet = getParamKSet(calleeFunc, 1, inOutEnv);
         KSet sizeKSet = getParamKSet(calleeFunc, 2, inOutEnv);

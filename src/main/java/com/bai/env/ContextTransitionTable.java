@@ -38,7 +38,7 @@ public class ContextTransitionTable {
      * @param callSite Address of the call instruction
      * @param currentContext Context under which the call instruction is processed 
      */
-    public void add(Address callSite, Context currentContext) {
+    public void add(Address callSite, context currentContext) {
         long[] currentCallString = currentContext.getCallString();
         TreeSet<long[]> callStringSet = transitionMap.get(callSite);
         if (callStringSet == null) {

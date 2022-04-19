@@ -4,7 +4,7 @@ import com.bai.Utils;
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.env.region.Heap;
 import com.bai.util.ARMProgramTestBase;
@@ -22,7 +22,7 @@ public class AllocFunctionTest extends ARMProgramTestBase {
     @Test
     public void testInvokeMalloc() {
         PcodeOp pcode = Utils.getMockCallPcodeOp();
-        Context mockContext = Mockito.mock(Context.class);
+        context mockContext = Mockito.mock(context.class);
         Function mockMalloc = Utils.getMockFunction("malloc", new DataType[]{IntegerDataType.dataType},
                 PointerDataType.dataType);
 
@@ -51,7 +51,7 @@ public class AllocFunctionTest extends ARMProgramTestBase {
     public void testInvokeCalloc() {
         PcodeOp pcode = Utils.getMockCallPcodeOp();
 
-        Context mockContext = Mockito.mock(Context.class);
+        context mockContext = Mockito.mock(context.class);
         Function mockCalloc = Utils.getMockFunction("calloc",
                 new DataType[]{IntegerDataType.dataType, IntegerDataType.dataType}, PointerDataType.dataType);
 

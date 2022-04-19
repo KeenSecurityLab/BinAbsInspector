@@ -3,7 +3,7 @@ package com.bai.env.funcs.stdfuncs;
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import ghidra.program.model.listing.Function;
 import ghidra.program.model.pcode.PcodeOp;
@@ -33,7 +33,7 @@ public class ListModel extends CppStdModelBase<LinkedList<KSet>> {
         return new LinkedList<>(other);
     }
 
-    private void pushBack(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, Context context, Function callFunc) {
+    private void pushBack(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, context context, Function callFunc) {
         if (callFunc.getParameterCount() != 2) {
             Logging.error("Wrong parameter for: " + callFunc);
             return;
@@ -51,7 +51,7 @@ public class ListModel extends CppStdModelBase<LinkedList<KSet>> {
         }
     }
 
-    private void back(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, Context context, Function callFunc) {
+    private void back(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, context context, Function callFunc) {
         if (callFunc.getParameterCount() != 1) {
             Logging.error("Wrong parameter for: " + callFunc);
             return;
@@ -81,7 +81,7 @@ public class ListModel extends CppStdModelBase<LinkedList<KSet>> {
         inOutEnv.set(retALoc, res, true);
     }
 
-    public void invoke(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, Context context, Function callFunc) {
+    public void invoke(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, context context, Function callFunc) {
         Logging.debug("Invoke std::list::" + callFunc.getName());
         switch (callFunc.getName()) {
             case "list":

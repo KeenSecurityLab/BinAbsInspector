@@ -1,6 +1,5 @@
 package com.bai.env.region;
 
-import com.bai.env.Context;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,27 +14,27 @@ public class Heap extends RegionBase {
 
     private final Address allocAddress;
 
-    private final Context context;
+    private final com.bai.env.context context;
 
     private boolean valid;
 
     private Address freeSite = null;
     
-    private static final Map<ImmutableTriple<Address, Context, Boolean>, Heap> pool = new HashMap<>();
+    private static final Map<ImmutableTriple<Address, com.bai.env.context, Boolean>, Heap> pool = new HashMap<>();
 
     /**
      * @hidden
      */
     public static final int DEFAULT_SIZE = 0x6400000;
 
-    private Heap(Address allocAddress, Context context, boolean valid) {
+    private Heap(Address allocAddress, com.bai.env.context context, boolean valid) {
         super(TYPE_HEAP, DEFAULT_SIZE); // 100MB default
         this.allocAddress = allocAddress;
         this.context = context;
         this.valid = valid;
     }
 
-    private Heap(Address allocAddress, Context context, long size, boolean valid) {
+    private Heap(Address allocAddress, com.bai.env.context context, long size, boolean valid) {
         super(TYPE_HEAP, size);
         this.allocAddress = allocAddress;
         this.context = context;
@@ -45,7 +44,7 @@ public class Heap extends RegionBase {
     /**
      * Getter for heap context of this Heap region
      */
-    public Context getContext() {
+    public com.bai.env.context getContext() {
         return context;
     }
 
@@ -132,8 +131,8 @@ public class Heap extends RegionBase {
      * @param valid Flag to indicate if this Heap region is allocated or freed 
      * @return Created Heap region
      */
-    public static Heap getHeap(Address allocSite, Context context, boolean valid) {
-        ImmutableTriple<Address, Context, Boolean> key = new ImmutableTriple<>(allocSite, context, valid);
+    public static Heap getHeap(Address allocSite, com.bai.env.context context, boolean valid) {
+        ImmutableTriple<Address, com.bai.env.context, Boolean> key = new ImmutableTriple<>(allocSite, context, valid);
         Heap oldHeap = pool.get(key);
         if (oldHeap != null) {
             return oldHeap;
@@ -151,7 +150,7 @@ public class Heap extends RegionBase {
      * @param valid Flag to indicate if this Heap region is allocated or freed 
      * @return Created Heap region
      */
-    public static Heap getHeap(Address allocSite, Context context, long size, boolean valid) {
+    public static Heap getHeap(Address allocSite, com.bai.env.context context, long size, boolean valid) {
         Heap res = getHeap(allocSite, context, valid);
         if (size < DEFAULT_SIZE) {
             res.setSize(size);

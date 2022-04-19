@@ -4,7 +4,7 @@ import com.bai.Utils;
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.env.region.Global;
 import com.bai.env.region.Heap;
@@ -36,7 +36,7 @@ public class StringUtilsTest extends ARMProgramTestBase {
         assert res == 5;
 
         inOutEnv = new AbsEnv();
-        Context mockContext = Mockito.mock(Context.class);
+        context mockContext = Mockito.mock(context.class);
         Heap heap = Heap.getHeap(GlobalState.flatAPI.toAddr(0x1122), mockContext, true);
         ALoc ptrALoc = ALoc.getALoc(heap, 0x3000, 4);
         inOutEnv.set(ptrALoc, new KSet(32).insert(new AbsVal(0x44434241)), true);
@@ -72,7 +72,7 @@ public class StringUtilsTest extends ARMProgramTestBase {
         assert res == 2;
 
         inOutEnv = new AbsEnv();
-        Context mockContext = Mockito.mock(Context.class);
+        context mockContext = Mockito.mock(context.class);
         Heap heap = Heap.getHeap(GlobalState.flatAPI.toAddr(0x1122), mockContext, true);
         ALoc ptrALoc = ALoc.getALoc(heap, 0x3000, 4);
         inOutEnv.set(ptrALoc, new KSet(32).insert(new AbsVal(0x44434241)), true);
@@ -108,7 +108,7 @@ public class StringUtilsTest extends ARMProgramTestBase {
         Assert.assertEquals(res, "ABCDE");
 
         inOutEnv = new AbsEnv();
-        Context mockContext = Mockito.mock(Context.class);
+        context mockContext = Mockito.mock(context.class);
         Heap heap = Heap.getHeap(GlobalState.flatAPI.toAddr(0x1122), mockContext, true);
         ALoc ptrALoc = ALoc.getALoc(heap, 0x3000, 4);
         inOutEnv.set(ptrALoc, new KSet(32).insert(new AbsVal(0x44434241)), true);

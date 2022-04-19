@@ -2,7 +2,7 @@ package com.bai.env.funcs.externalfuncs;
 
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.env.region.Reg;
 import ghidra.app.cmd.function.ApplyFunctionSignatureCmd;
@@ -53,7 +53,7 @@ public abstract class ExternalFunctionBase {
      * @param context the Context.
      * @param calleeFunc the callee Function.
      */
-    public abstract void invoke(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, Context context, Function calleeFunc);
+    public abstract void invoke(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, context context, Function calleeFunc);
 
     /**
      * @hidden

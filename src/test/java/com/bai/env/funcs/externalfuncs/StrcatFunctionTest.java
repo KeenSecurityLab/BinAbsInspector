@@ -4,7 +4,7 @@ import com.bai.Utils;
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.env.TaintMap;
 import com.bai.env.region.Global;
@@ -22,7 +22,7 @@ public class StrcatFunctionTest extends ARMProgramTestBase {
     @Test
     public void testInvokeStrcat() {
         PcodeOp pcode = Utils.getMockCallPcodeOp();
-        Context mockContext = Mockito.mock(Context.class);
+        context mockContext = Mockito.mock(context.class);
         Function mockStrcat = Utils.getMockFunction("strcat",
                 new DataType[]{PointerDataType.dataType, PointerDataType.dataType}, PointerDataType.dataType);
 

@@ -1,5 +1,5 @@
 import com.bai.env.AbsEnv;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.env.region.Heap;
 import com.bai.env.region.Reg;
@@ -35,11 +35,11 @@ public class CppMapTest extends IntegrationTestBase {
         File file = new File(path);
         Program program = prepareProgram(file);
         analyzeFromMain(program);
-        for (Context ctx : Context.getPool().keySet()) {
+        for (context ctx : context.getPool().keySet()) {
             Logging.debug(ctx.toString());
         }
         Function mainFunction = program.getListing().getGlobalFunctions("main").get(0);
-        Context mainContext = Context.getContext(mainFunction).get(0);
+        context mainContext = context.getContext(mainFunction).get(0);
         AbsEnv absEnv = mainContext.getValueBefore(GlobalState.flatAPI.toAddr(0x10904));
         KSet r0KSet = absEnv.get(Reg.getALoc("r1"));
         assert r0KSet.iterator().next().getRegion().isHeap();

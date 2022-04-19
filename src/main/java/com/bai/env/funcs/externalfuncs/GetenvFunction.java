@@ -2,7 +2,7 @@ package com.bai.env.funcs.externalfuncs;
 
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.env.TaintMap;
 import ghidra.program.model.data.PointerDataType;
@@ -28,7 +28,7 @@ public class GetenvFunction extends ExternalFunctionBase {
         return staticSymbols;
     }
 
-    public void invoke(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, Context context, Function callFunc) {
+    public void invoke(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, context context, Function callFunc) {
         ALoc retALoc = getReturnALoc(callFunc, false);
         if (retALoc == null) {
             return;

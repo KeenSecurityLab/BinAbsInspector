@@ -4,7 +4,7 @@ import com.bai.Utils;
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.env.region.Heap;
 import com.bai.env.region.Reg;
@@ -22,7 +22,7 @@ public class StrlenFunctionTest extends ARMProgramTestBase {
     @Test
     public void testInvokeStrlen() {
         final PcodeOp pcode = Utils.getMockCallPcodeOp();
-        final Context mockContext = Mockito.mock(Context.class);
+        final context mockContext = Mockito.mock(context.class);
         final Function mockStrlen = Utils.getMockFunction("strlen", new DataType[]{IntegerDataType.dataType},
                 IntegerDataType.dataType);
 

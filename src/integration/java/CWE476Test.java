@@ -1,5 +1,5 @@
 import com.bai.checkers.MemoryCorruption;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.util.CWEReport;
 import com.bai.util.GlobalState;
 import com.bai.util.Logging;
@@ -39,7 +39,7 @@ public class CWE476Test extends IntegrationTestBase {
         analyzeFromMain(program);
 
         Address address = GlobalState.flatAPI.toAddr(0x10444);
-        Context context = Context.getContext(GlobalState.flatAPI.getGlobalFunctions("main").get(0)).get(0);
+        context context = com.bai.env.context.getContext(GlobalState.flatAPI.getGlobalFunctions("main").get(0)).get(0);
         CWEReport expect = new CWEReport(MemoryCorruption.CWE476, "", "").setContext(context).setAddress(address);
         assert Logging.getCWEReports().containsKey(expect);
     }
@@ -52,7 +52,7 @@ public class CWE476Test extends IntegrationTestBase {
         analyzeFromMain(program);
 
         Address address = GlobalState.flatAPI.toAddr(0x10075c);
-        Context context = Context.getContext(GlobalState.flatAPI.getGlobalFunctions("main").get(0)).get(0);
+        context context = com.bai.env.context.getContext(GlobalState.flatAPI.getGlobalFunctions("main").get(0)).get(0);
         CWEReport expect = new CWEReport(MemoryCorruption.CWE476, "", "").setContext(context).setAddress(address);
         assert Logging.getCWEReports().containsKey(expect);
     }
@@ -65,7 +65,7 @@ public class CWE476Test extends IntegrationTestBase {
         analyzeFromMain(program);
 
         Address address = GlobalState.flatAPI.toAddr(0x100682);
-        Context context = Context.getContext(GlobalState.flatAPI.getGlobalFunctions("main").get(0)).get(0);
+        context context = com.bai.env.context.getContext(GlobalState.flatAPI.getGlobalFunctions("main").get(0)).get(0);
         CWEReport expect = new CWEReport(MemoryCorruption.CWE476, "", "").setContext(context).setAddress(address);
         assert Logging.getCWEReports().containsKey(expect);
     }
@@ -78,7 +78,7 @@ public class CWE476Test extends IntegrationTestBase {
         analyzeFromMain(program);
 
         Address address = GlobalState.flatAPI.toAddr(0x10570);
-        Context context = Context.getContext(GlobalState.flatAPI.getGlobalFunctions("main").get(0)).get(0);
+        context context = com.bai.env.context.getContext(GlobalState.flatAPI.getGlobalFunctions("main").get(0)).get(0);
         CWEReport expect = new CWEReport(MemoryCorruption.CWE476, "", "").setContext(context).setAddress(address);
         assert Logging.getCWEReports().containsKey(expect);
     }

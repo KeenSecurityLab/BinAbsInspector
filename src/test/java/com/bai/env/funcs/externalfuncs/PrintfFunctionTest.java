@@ -4,7 +4,7 @@ import com.bai.Utils;
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.util.Logging;
 import ghidra.program.model.data.DataType;
@@ -22,7 +22,7 @@ public class PrintfFunctionTest extends ARMProgramTestBase {
 
     @Test
     public void testInvokePrintf() {
-        final Context mockContext = Mockito.mock(Context.class);
+        final context mockContext = Mockito.mock(context.class);
         Function mockPrintf = Utils.getMockFunction("printf",
                 new DataType[]{PointerDataType.dataType}, IntegerDataType.dataType);
         final ALoc formatALoc = ALoc.getALoc(mockPrintf.getParameter(0).getLastStorageVarnode());

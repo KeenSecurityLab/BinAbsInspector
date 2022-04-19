@@ -1,7 +1,7 @@
 package com.bai.util;
 
 import com.bai.env.ALoc;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.ContextTransitionTable;
 import com.bai.env.TaintMap;
 import com.bai.env.funcs.FunctionModelManager;
@@ -38,7 +38,7 @@ public class GlobalState {
      */
     public static void reset() {
         ALoc.resetPool();
-        Context.resetPool();
+        context.resetPool();
         Heap.resetPool();
         Local.resetPool();
         CFG.resetPool();

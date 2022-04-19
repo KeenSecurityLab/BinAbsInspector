@@ -1,5 +1,5 @@
 import com.bai.env.AbsEnv;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.util.Logging;
 import ghidra.program.model.listing.Function;
 import ghidra.program.model.listing.Program;
@@ -42,7 +42,7 @@ public class ArrayTest extends IntegrationTestBase {
         Program program = prepareProgram(file);
         analyzeFromMain(program);
         Function mainFunction = program.getListing().getGlobalFunctions("main").get(0);
-        Context mainContext = Context.getContext(mainFunction).get(0);
+        context mainContext = context.getContext(mainFunction).get(0);
         AbsEnv env = mainContext.getValueBefore(program.getAddressFactory().getAddress("0x10510"));
         Logging.debug(env.toString());
     }
@@ -54,7 +54,7 @@ public class ArrayTest extends IntegrationTestBase {
         Program program = prepareProgram(file);
         analyzeFromMain(program);
         Function mainFunction = program.getListing().getGlobalFunctions("main").get(0);
-        Context mainContext = Context.getContext(mainFunction).get(0);
+        context mainContext = context.getContext(mainFunction).get(0);
         AbsEnv env = mainContext.getValueBefore(program.getAddressFactory().getAddress("0x100874"));
         Logging.debug(env.toString());
     }
@@ -66,7 +66,7 @@ public class ArrayTest extends IntegrationTestBase {
         Program program = prepareProgram(file);
         analyzeFromMain(program);
         Function mainFunction = program.getListing().getGlobalFunctions("main").get(0);
-        Context mainContext = Context.getContext(mainFunction).get(0);
+        context mainContext = context.getContext(mainFunction).get(0);
         AbsEnv env = mainContext.getValueBefore(program.getAddressFactory().getAddress("0x10071f"));
         Logging.debug(env.toString());
     }
@@ -78,7 +78,7 @@ public class ArrayTest extends IntegrationTestBase {
         Program program = prepareProgram(file);
         analyzeFromMain(program);
         Function mainFunction = program.getListing().getGlobalFunctions("main").get(0);
-        Context mainContext = Context.getContext(mainFunction).get(0);
+        context mainContext = context.getContext(mainFunction).get(0);
         AbsEnv env = mainContext.getValueBefore(program.getAddressFactory().getAddress("0x112a3"));
         Logging.debug(env.toString());
     }

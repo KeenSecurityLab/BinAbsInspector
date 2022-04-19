@@ -3,7 +3,7 @@ package com.bai.util;
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.env.funcs.FunctionModelManager;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -171,7 +171,7 @@ public class Utils {
      * @param bits the bit length.
      * @return return a List of adjusted AbsVal.
      */
-    public static List<AbsVal> adjustLocalAbsVal(AbsVal absVal, Context context, int bits) {
+    public static List<AbsVal> adjustLocalAbsVal(AbsVal absVal, context context, int bits) {
         List<AbsVal> res = new ArrayList<>();
         if (context == null || context.getOldSpKSet() == null) {
             return res;

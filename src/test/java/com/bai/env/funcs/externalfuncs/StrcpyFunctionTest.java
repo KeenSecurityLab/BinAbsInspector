@@ -7,7 +7,7 @@ import com.bai.Utils;
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.env.region.Heap;
 import com.bai.util.GlobalState;
@@ -30,7 +30,7 @@ public class StrcpyFunctionTest extends ARMProgramTestBase {
     public void testInvokeStrcpy() {
 
         final PcodeOp pcode = Utils.getMockCallPcodeOp();
-        Context mockContext = Mockito.mock(Context.class);
+        context mockContext = Mockito.mock(context.class);
         Function mockStrcpy = Utils.getMockFunction("strcpy",
                 new DataType[]{PointerDataType.dataType, PointerDataType.dataType}, PointerDataType.dataType);
         when(mockStrcpy.getName()).thenReturn("strcpy");

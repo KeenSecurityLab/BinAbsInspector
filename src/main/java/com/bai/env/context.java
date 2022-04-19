@@ -30,15 +30,15 @@ import org.javimmutable.collections.tree.JImmutableTreeMap;
 
 
 /** Context **/
-public class Context {
+public class context {
 
-    private static final Map<Context, Context> pool = new HashMap<>();
+    private static final Map<context, context> pool = new HashMap<>();
 
-    private static Context current;
+    private static context current;
 
-    private static Stack<Context> active = new Stack<>();
+    private static Stack<context> active = new Stack<>();
 
-    private static Stack<Context> pending = new Stack<>();
+    private static Stack<context> pending = new Stack<>();
 
     private Function function;
 
@@ -56,12 +56,12 @@ public class Context {
 
     private Worklist worklist;
 
-    private Context(Function function) {
+    private context(Function function) {
         this.function = function;
         this.worklist = new Worklist(CFG.getCFG(function));
     }
 
-    private Context(Function function, long[] callString) {
+    private context(Function function, long[] callString) {
         this.function = function;
         this.callstring = callString;
         this.worklist = new Worklist(CFG.getCFG(function));
@@ -106,7 +106,7 @@ public class Context {
     /**
      * @hidden
     */
-    public static Map<Context, Context> getPool() {
+    public static Map<context, context> getPool() {
         return pool;
     }
 
@@ -176,15 +176,7 @@ public class Context {
         }
     }
 
-    private void updateSP(AbsEnv inOutEnv) {
-        ALoc spALoc = ALoc.getSPALoc();
-        KSet oldSpKSet = inOutEnv.get(spALoc);
-        if (oldSpKSet.isNormal()) {
-            JImmutableSet<AbsVal> filteredSet = oldSpKSet.getInnerSet();
-            for (AbsVal absVal : filteredSet) {
-                if (!absVal.getRegion().isLocal()) {
-                    filteredSet = filteredSet.delete(absVal);
-                }
+    private void updateSP(AbsEnv inOutEnv) { ALoc spALoc = ALoc.getSPALoc(); KSet oldSpKSet = inOutEnv.get(spALoc); if (oldSpKSet.isNormal()) { JImmutableSet<AbsVal> filteredSet = oldSpKSet.getInnerSet(); for (AbsVal absVal : filteredSet) { if (!absVal.getRegion().isLocal()) { filteredSet = filteredSet.delete(absVal); }
             }
             oldSpKSet = new KSet(filteredSet, oldSpKSet.getBits());
             updateOldSp(oldSpKSet);
@@ -316,8 +308,8 @@ public class Context {
             return true;
         }
 
-        if (obj instanceof Context) {
-            Context tmp = (Context) obj;
+        if (obj instanceof context) {
+            context tmp = (context) obj;
             return this.function == tmp.function && Arrays.equals(this.callstring, tmp.callstring);
         }
         return false;
@@ -353,9 +345,9 @@ public class Context {
     /**
      * @hidden
      */
-    public static Context getEntryContext(Function entryFunction) {
-        Context tmp = new Context(entryFunction);
-        Context ctx = pool.get(tmp);
+    public static context getEntryContext(Function entryFunction) {
+        context tmp = new context(entryFunction);
+        context ctx = pool.get(tmp);
         if (ctx != null) {
             return ctx;
         }
@@ -366,13 +358,13 @@ public class Context {
     /**
      * @hidden
      */    
-    public static Context getContext(Context prev, Address callSite, Function tf) {
-        Context newCtx = new Context(tf);
+    public static context getContext(context prev, Address callSite, Function tf) {
+        context newCtx = new context(tf);
         System.arraycopy(prev.callstring, 1, newCtx.callstring, 0, GlobalState.config.getCallStringK() - 1);
         System.arraycopy(prev.funcs, 1, newCtx.funcs, 0, GlobalState.config.getCallStringK() - 1);
         newCtx.callstring[GlobalState.config.getCallStringK() - 1] = callSite.getOffset();
         newCtx.funcs[GlobalState.config.getCallStringK() - 1] = prev.getFunction();
-        Context ctx = pool.get(newCtx);
+        context ctx = pool.get(newCtx);
         if (ctx != null) {
             return ctx;
         }
@@ -383,8 +375,8 @@ public class Context {
     /**
      * @hidden
      */
-    public static Context getContext(Function tf, long[] callstring) { // only for return use
-        Context newCtx = new Context(tf, callstring);
+    public static context getContext(Function tf, long[] callstring) { // only for return use
+        context newCtx = new context(tf, callstring);
         return pool.get(newCtx);
     }
 
@@ -392,9 +384,9 @@ public class Context {
      * @hidden
      * @deprecated Improper method for Context class, to be changed
      */
-    public static List<Context> getContext(Function function) {
-        List<Context> res = new ArrayList<>();
-        for (Context context : pool.keySet()) {
+    public static List<context> getContext(Function function) {
+        List<context> res = new ArrayList<>();
+        for (com.bai.env.context context : pool.keySet()) {
             if (context.getFunction().equals(function)) {
                 res.add(context);
             }
@@ -405,7 +397,7 @@ public class Context {
     /**
      * @hidden
      */
-    public static void pushActive(Context ctx) {
+    public static void pushActive(context ctx) {
         if (!active.contains(ctx)) {
             active.push(ctx);
         }
@@ -414,13 +406,13 @@ public class Context {
     /**
      * @hidden
      */    
-    public static void pushPending(Context ctx) {
+    public static void pushPending(context ctx) {
         if (!pending.contains(ctx)) {
             pending.push(ctx);
         }
     }
 
-    private static Context popActive() {
+    private static context popActive() {
         if (active.isEmpty()) {
             return null;
         }
@@ -428,7 +420,7 @@ public class Context {
         return active.pop();
     }
 
-    private static Context popPending() {
+    private static context popPending() {
         if (pending.isEmpty()) {
             return null;
         }
@@ -438,8 +430,8 @@ public class Context {
     /**
      * @hidden
      */
-    public static Context popContext() {
-        Context ctx = popActive();
+    public static context popContext() {
+        context ctx = popActive();
         if (ctx == null) {
             ctx = popPending();
         }
@@ -449,7 +441,7 @@ public class Context {
     /**
      * @hidden
      */    
-    public static boolean isWait(Context ctx) {
+    public static boolean isWait(context ctx) {
         return active.contains(ctx) || pending.contains(ctx);
     }
 
@@ -457,7 +449,7 @@ public class Context {
      * @hidden
      * Main entry to drive interprocedural analysis with an entry context
      */    
-    public static void mainLoop(Context entryCtx) {
+    public static void mainLoop(context entryCtx) {
         current = entryCtx;
         while (current != null) {
             current.loop();
@@ -472,7 +464,7 @@ public class Context {
      * @hidden
      * Main entry to drive interprocedural analysis with an entry context and a timer
      */    
-    public static void mainLoopTimeout(Context entryCtx, long timeout) {
+    public static void mainLoopTimeout(context entryCtx, long timeout) {
         Logging.info("Analyze started at " + java.time.LocalTime.now() + " with timout " + timeout + "s");
         Runnable task = () -> mainLoop(entryCtx);
         ExecutorService executor = Executors.newSingleThreadExecutor();

@@ -3,7 +3,7 @@ package com.bai.env.funcs.stdfuncs;
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import ghidra.program.model.data.ParameterDefinitionImpl;
 import ghidra.program.model.data.PointerDataType;
@@ -39,7 +39,7 @@ public class VectorModel extends CppStdModelBase<ArrayList<KSet>> {
         return new ArrayList<>(other);
     }
 
-    private void end(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, Context context, Function callFunc) {
+    private void end(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, context context, Function callFunc) {
         if (callFunc.getParameterCount() != 1) {
             Logging.error("Wrong parameter for: " + callFunc);
             return;
@@ -52,7 +52,7 @@ public class VectorModel extends CppStdModelBase<ArrayList<KSet>> {
         inOutEnv.set(retALoc, KSet.getTop(), true);
     }
 
-    private void insert(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, Context context, Function callFunc) {
+    private void insert(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, context context, Function callFunc) {
         if (callFunc.getParameterCount() != 4) {
             Logging.error("Wrong parameter for: " + callFunc);
             return;
@@ -100,7 +100,7 @@ public class VectorModel extends CppStdModelBase<ArrayList<KSet>> {
         }
     }
 
-    private void subscript(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, Context context, Function callFunc) {
+    private void subscript(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, context context, Function callFunc) {
         if (callFunc.getParameterCount() != 2) {
             Logging.error("Wrong parameter for: " + callFunc);
             return;
@@ -148,7 +148,7 @@ public class VectorModel extends CppStdModelBase<ArrayList<KSet>> {
         inOutEnv.set(retALoc, resKSet, true);
     }
 
-    public void invoke(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, Context context, Function callFunc) {
+    public void invoke(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, context context, Function callFunc) {
         Logging.debug("Invoke std::vector::" + callFunc.getName());
         switch (callFunc.getName()) {
             case "vector":

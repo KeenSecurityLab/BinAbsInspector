@@ -1,7 +1,7 @@
 import static com.bai.checkers.MemoryCorruption.CWE416;
 
 import com.bai.checkers.MemoryCorruption;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.util.CWEReport;
 import com.bai.util.GlobalState;
 import com.bai.util.Logging;
@@ -37,7 +37,7 @@ public class CWE416Test extends IntegrationTestBase {
         File file = new File(path);
         Program program = prepareProgram(file);
         analyzeFromMain(program);
-        Context context = Context.getContext(GlobalState.flatAPI.getFunctionAt(GlobalState.flatAPI.toAddr(0x10460)))
+        context context = com.bai.env.context.getContext(GlobalState.flatAPI.getFunctionAt(GlobalState.flatAPI.toAddr(0x10460)))
                 .get(0);
         assert Logging.getCWEReports().size() == 3;
         long[] expectedAddressesLong = {0x104b0, 0x104bc, 0x104c4};
@@ -55,7 +55,7 @@ public class CWE416Test extends IntegrationTestBase {
         File file = new File(path);
         Program program = prepareProgram(file);
         analyzeFromMain(program);
-        Context context = Context.getContext(GlobalState.flatAPI.getFunctionAt(GlobalState.flatAPI.toAddr(0x100814)))
+        context context = com.bai.env.context.getContext(GlobalState.flatAPI.getFunctionAt(GlobalState.flatAPI.toAddr(0x100814)))
                 .get(0);
         assert Logging.getCWEReports().size() == 3;
         long[] expectedAddressesLong = {0x100858, 0x100860, 0x100868};
@@ -73,7 +73,7 @@ public class CWE416Test extends IntegrationTestBase {
         File file = new File(path);
         Program program = prepareProgram(file);
         analyzeFromMain(program);
-        Context context = Context.getContext(GlobalState.flatAPI.getFunctionAt(GlobalState.flatAPI.toAddr(0x1006da)))
+        context context = com.bai.env.context.getContext(GlobalState.flatAPI.getFunctionAt(GlobalState.flatAPI.toAddr(0x1006da)))
                 .get(0);
         assert Logging.getCWEReports().size() == 3;
         long[] expectedAddressesLong = {0x10072e, 0x100737, 0x10073e};
@@ -91,7 +91,7 @@ public class CWE416Test extends IntegrationTestBase {
         File file = new File(path);
         Program program = prepareProgram(file);
         analyzeFromMain(program);
-        Context context = Context.getContext(GlobalState.flatAPI.getFunctionAt(GlobalState.flatAPI.toAddr(0x1120d)))
+        context context = com.bai.env.context.getContext(GlobalState.flatAPI.getFunctionAt(GlobalState.flatAPI.toAddr(0x1120d)))
                 .get(0);
         assert Logging.getCWEReports().size() == 3;
         long[] expectedAddressesLong = {0x11279, 0x11284, 0x1128a};

@@ -21,7 +21,7 @@ public class KSetTest {
 
     Function mockFunction = Mockito.mock(Function.class);
     Address mockAddress = Mockito.mock(Address.class);
-    Context mockContext = Mockito.mock(Context.class);
+    context mockContext = Mockito.mock(context.class);
 
     @BeforeClass
     public static void initClass() {

@@ -9,7 +9,7 @@ import ghidra.program.model.listing.Function;
 import ghidra.program.model.listing.Program;
 import ghidra.test.AbstractGhidraHeadlessIntegrationTest;
 import ghidra.util.task.TaskMonitorAdapter;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.solver.InterSolver;
 import com.bai.util.Architecture;
 import com.bai.util.Config;
@@ -62,8 +62,8 @@ public abstract class IntegrationTestBase extends AbstractGhidraHeadlessIntegrat
         solver.run();
     }
 
-    protected List<Context> getAllContexts() {
-        return new ArrayList<>(Context.getPool().keySet());
+    protected List<context> getAllContexts() {
+        return new ArrayList<>(context.getPool().keySet());
     }
 
 }

@@ -1,6 +1,5 @@
 package com.bai.util;
 
-import com.bai.env.Context;
 import com.google.errorprone.annotations.CheckReturnValue;
 import ghidra.program.model.address.Address;
 import ghidra.program.model.listing.Function;
@@ -16,7 +15,7 @@ public class CWEReport implements Message {
     private String version;
     private String details;
     private Address address;
-    private Context context;
+    private com.bai.env.context context;
 
     public CWEReport(String cwe, String version, String details) {
         this.cwe = cwe;
@@ -44,7 +43,7 @@ public class CWEReport implements Message {
      * Get the context.
      * @return the context.
      */
-    public Context getContext() {
+    public com.bai.env.context getContext() {
         return context;
     }
 
@@ -65,7 +64,7 @@ public class CWEReport implements Message {
      * @return the cwe report.
      */
     @CheckReturnValue
-    public CWEReport setContext(Context context) {
+    public CWEReport setContext(com.bai.env.context context) {
         this.context = context;
         return this;
     }

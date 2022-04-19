@@ -5,7 +5,7 @@ import static com.bai.util.Utils.getAddress;
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.env.region.Heap;
 import ghidra.program.model.address.Address;
@@ -32,7 +32,7 @@ public class CallocFunction extends ExternalFunctionBase {
     }
 
     @Override
-    public void invoke(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, Context context, Function callFunc) {
+    public void invoke(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, context context, Function callFunc) {
         long size = Heap.DEFAULT_SIZE;
         ALoc retALoc = getReturnALoc(callFunc, false);
         if (retALoc == null) {

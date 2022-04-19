@@ -4,7 +4,7 @@ import com.bai.Utils;
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.env.region.Global;
 import com.bai.env.region.Heap;
@@ -875,7 +875,7 @@ public class ConstraintSolverTest extends ARMProgramTestBase {
                 Utils.getRegVarnode("r0"),
                 Utils.getRegVarnode("r1"),
         };
-        Context mockContext = Mockito.mock(Context.class);
+        context mockContext = Mockito.mock(context.class);
         Heap heap = Heap.getHeap(Utils.getDefaultAddress(0x1000), mockContext, true);
 
         KSet ptrKSet = new KSet(32)
@@ -927,7 +927,7 @@ public class ConstraintSolverTest extends ARMProgramTestBase {
                 Utils.getRegVarnode("r0"),
                 new Varnode(Utils.getConstantAddress(0x11223344), GlobalState.arch.getDefaultPointerSize())
         };
-        Context mockContext = Mockito.mock(Context.class);
+        context mockContext = Mockito.mock(context.class);
         Heap heap = Heap.getHeap(Utils.getDefaultAddress(0x1000), mockContext, true);
 
         KSet ptrKSet = new KSet(32)

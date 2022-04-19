@@ -2,7 +2,7 @@ package com.bai.checkers;
 
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.env.funcs.FunctionModelManager;
 import com.bai.env.funcs.externalfuncs.ExternalFunctionBase;
@@ -81,7 +81,7 @@ public class MemoryCorruption {
      * @param argIndex
      * @return
      */
-    public static boolean checkNullPointerDereference(KSet kSet, Address address, Context context, Function callee,
+    public static boolean checkNullPointerDereference(KSet kSet, Address address, context context, Function callee,
             int type, int argIndex) {
         if (!kSet.isNormal() || !kSet.isSingleton()) {
             return true;
@@ -121,7 +121,7 @@ public class MemoryCorruption {
      * @param type
      * @return
      */
-    public static boolean checkUseAfterFree(AbsVal ptr, Address address, Context context, Function callee, int type) {
+    public static boolean checkUseAfterFree(AbsVal ptr, Address address, context context, Function callee, int type) {
         assert ptr.getRegion().isHeap();
         Heap chunk = (Heap) ptr.getRegion();
         String details = null;
@@ -158,7 +158,7 @@ public class MemoryCorruption {
      * @param context
      * @return
      */
-    public static boolean checkDoubleFree(AbsVal ptr, Address address, Context context) {
+    public static boolean checkDoubleFree(AbsVal ptr, Address address, context context) {
         assert ptr.getRegion().isHeap();
         Heap chunk = (Heap) ptr.getRegion();
         if (!chunk.isValid()) {
@@ -171,7 +171,7 @@ public class MemoryCorruption {
         return true;
     }
 
-    private static boolean checkHeapOutOfBound(AbsVal ptr, Address address, Context context, Function callee,
+    private static boolean checkHeapOutOfBound(AbsVal ptr, Address address, context context, Function callee,
             int type) {
         if (ptr.getOffset() < 0 || ptr.getOffset() >= ptr.getRegion().getSize()) {
             String details = null;
@@ -201,7 +201,7 @@ public class MemoryCorruption {
         return true;
     }
 
-    private static boolean checkStackOutOfBound(AbsVal ptr, Address address, Context context, Function callee,
+    private static boolean checkStackOutOfBound(AbsVal ptr, Address address, context context, Function callee,
             int type) {
 
         long offset = ptr.getOffset();
@@ -236,7 +236,7 @@ public class MemoryCorruption {
      * @param type
      * @return
      */
-    public static boolean checkOutOfBound(AbsVal ptr, Address address, Context context, Function callee, int type) {
+    public static boolean checkOutOfBound(AbsVal ptr, Address address, context context, Function callee, int type) {
         assert ptr.getRegion().isHeap() || ptr.getRegion().isLocal();
         if (ptr.getRegion().isHeap()) {
             Heap chunk = (Heap) ptr.getRegion();
@@ -259,7 +259,7 @@ public class MemoryCorruption {
      * @return
      */
     public static boolean checkExternalCallParameters(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv,
-            Context context, Function calleeFunc) {
+            context context, Function calleeFunc) {
         boolean isCheckPasss = true;
         Address address = Utils.getAddress(pcode);
         String functionName = calleeFunc.getName(false);

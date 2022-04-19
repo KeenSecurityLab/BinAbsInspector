@@ -3,7 +3,6 @@ package com.bai.solver;
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
 import com.bai.env.Interval;
 import com.bai.env.KSet;
 import com.bai.env.region.Global;
@@ -33,7 +32,7 @@ public class ConstraintSolver {
     private Optimize optimize;
     private HashMap<ALoc, Expr> aLocExprHashMap;
     private int symbolNum = 0;
-    private Context context;
+    private com.bai.env.context context;
 
     public ConstraintSolver() {
         Map<String, String> config = Map.of("model", "true");
@@ -49,7 +48,7 @@ public class ConstraintSolver {
         return z3Ctx;
     }
 
-    public void initialize(AddressRange addressRange, Context context) {
+    public void initialize(AddressRange addressRange, com.bai.env.context context) {
         this.context = context;
         Address cur = addressRange.getMinAddress();
         while (cur.getOffset() <= addressRange.getMaxAddress().getOffset()) {

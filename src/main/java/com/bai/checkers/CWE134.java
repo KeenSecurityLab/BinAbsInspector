@@ -2,7 +2,7 @@ package com.bai.checkers;
 
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.env.TaintMap;
 import com.bai.env.TaintMap.Source;
@@ -63,7 +63,7 @@ public class CWE134 extends CheckerBase {
         return source.getFunction().equals(GlobalState.eEntryFunction);
     }
 
-    private boolean checkFunctionParameters(Context context, AbsEnv absEnv, Function callee, Address address) {
+    private boolean checkFunctionParameters(context context, AbsEnv absEnv, Function callee, Address address) {
         String name = callee.getName();
         int paramIndex = interestingSymbols.get(name);
         Logging.debug("Processing argument " + paramIndex + " at " + name + "()");
@@ -118,7 +118,7 @@ public class CWE134 extends CheckerBase {
                     continue;
                 }
                 Logging.debug(fromAddress + " -> " + toAddress + " " + callee.getName());
-                for (Context context : Context.getContext(caller)) {
+                for (com.bai.env.context context : context.getContext(caller)) {
                     AbsEnv absEnv = context.getAbsEnvIn().get(fromAddress);
                     if (absEnv == null) {
                         continue;

@@ -1,5 +1,5 @@
 import com.bai.checkers.MemoryCorruption;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.util.CWEReport;
 import com.bai.util.GlobalState;
 import com.bai.util.Logging;
@@ -56,18 +56,18 @@ public class StrippedStaticTest extends IntegrationTestBase {
         Map<CWEReport, CWEReport> cweReportMap = Logging.getCWEReports();
 
         Address address = GlobalState.flatAPI.toAddr(0x4001c7);
-        Context context = Context.getContext(GlobalState.flatAPI.getFunctionAt(GlobalState.flatAPI.toAddr(0x40019b)))
+        context context = com.bai.env.context.getContext(GlobalState.flatAPI.getFunctionAt(GlobalState.flatAPI.toAddr(0x40019b)))
                 .get(0);
         CWEReport expect = new CWEReport(MemoryCorruption.CWE787, "", "").setContext(context).setAddress(address);
         assert cweReportMap.containsKey(expect);
 
         address = GlobalState.flatAPI.toAddr(0x400206);
-        context = Context.getContext(GlobalState.flatAPI.getFunctionAt(GlobalState.flatAPI.toAddr(0x4001d6))).get(0);
+        context = com.bai.env.context.getContext(GlobalState.flatAPI.getFunctionAt(GlobalState.flatAPI.toAddr(0x4001d6))).get(0);
         expect = new CWEReport(MemoryCorruption.CWE125, "", "").setContext(context).setAddress(address);
         assert cweReportMap.containsKey(expect);
 
         address = GlobalState.flatAPI.toAddr(0x400286);
-        context = Context.getContext(GlobalState.flatAPI.getFunctionAt(GlobalState.flatAPI.toAddr(0x40022e))).get(0);
+        context = com.bai.env.context.getContext(GlobalState.flatAPI.getFunctionAt(GlobalState.flatAPI.toAddr(0x40022e))).get(0);
         expect = new CWEReport(MemoryCorruption.CWE119, "", "").setContext(context).setAddress(address);
         assert cweReportMap.containsKey(expect);
     }

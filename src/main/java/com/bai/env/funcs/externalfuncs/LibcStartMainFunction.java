@@ -2,7 +2,7 @@ package com.bai.env.funcs.externalfuncs;
 
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.util.GlobalState;
 import com.bai.util.Logging;
@@ -27,7 +27,7 @@ public class LibcStartMainFunction extends ExternalFunctionBase {
     }
 
     @Override
-    public void invoke(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, Context context, Function callFunc) {
+    public void invoke(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, context context, Function callFunc) {
         KSet mainPtrKSet = getParamKSet(callFunc, 0, inOutEnv);
         if (!mainPtrKSet.isNormal()) {
             Logging.error("Failed to get Main function pointer.");
@@ -44,8 +44,8 @@ public class LibcStartMainFunction extends ExternalFunctionBase {
             Logging.error("Failed to get Main function.");
             return;
         }
-        Context mainContext = Context.getContext(context, Utils.getAddress(pcode), mainFunc);
+        com.bai.env.context mainContext = com.bai.env.context.getContext(context, Utils.getAddress(pcode), mainFunc);
         mainContext.initContext(inOutEnv, true);
-        Context.pushActive(mainContext);
+        com.bai.env.context.pushActive(mainContext);
     }
 }

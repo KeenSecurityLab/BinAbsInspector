@@ -3,7 +3,7 @@ package com.bai.checkers;
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.env.TaintMap;
 import com.bai.env.TaintMap.Source;
@@ -157,7 +157,7 @@ public class CWE78 extends CheckerBase {
                     continue;
                 }
                 Logging.debug(fromAddress + " -> " + toAddress + " " + callee.getName());
-                for (Context context : Context.getContext(caller)) {
+                for (com.bai.env.context context : context.getContext(caller)) {
                     AbsEnv absEnv = context.getAbsEnvIn().get(fromAddress);
                     if (absEnv == null) {
                         continue;

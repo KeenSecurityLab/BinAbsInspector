@@ -3,7 +3,6 @@ package com.bai.solver;
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
 import com.bai.env.ContextTransitionTable;
 import com.bai.env.Interval;
 import com.bai.env.KSet;
@@ -59,7 +58,7 @@ public class PcodeVisitor {
 
     }
 
-    private Context context;
+    private com.bai.env.context context;
 
     private boolean jumpOut = false;
 
@@ -73,7 +72,7 @@ public class PcodeVisitor {
 
     private static Map<Address, Map> fallThroughConstaintsMap = new HashMap<>();
 
-    public PcodeVisitor(Context context) {
+    public PcodeVisitor(com.bai.env.context context) {
         this.context = context;
     }
 
@@ -166,7 +165,7 @@ public class PcodeVisitor {
      * @return the array of ImmutablePair<Address, AbsEnv>, taken pair at index 0, fallthrough pair at index 1;
      */
     @SuppressWarnings("unchecked")
-    private ImmutablePair<Address, AbsEnv>[] processConstraints(Address address, AbsEnv inOutEnv, Context context) {
+    private ImmutablePair<Address, AbsEnv>[] processConstraints(Address address, AbsEnv inOutEnv, com.bai.env.context context) {
         PcodeOp[] pcodeOps = GlobalState.flatAPI.getInstructionAt(address).getPcode(true);
         PcodeOp pcode = pcodeOps[pcodeOps.length - 1];
         assert pcode.getOpcode() == PcodeOp.CBRANCH;
@@ -703,7 +702,7 @@ public class PcodeVisitor {
             }
         }
 
-        Context newContext = Context.getContext(context, callSite, callee);
+        com.bai.env.context newContext = com.bai.env.context.getContext(context, callSite, callee);
         Logging.debug("New Context: " + newContext.toString());
 
         if (callee.hasNoReturn()) {
@@ -717,18 +716,18 @@ public class PcodeVisitor {
                 context.insertToWorklist(callSite);
                 switchContext = true;
                 if (context.equals(newContext)) {
-                    Context.pushActive(context);
+                    com.bai.env.context.pushActive(context);
                 } else {
-                    Context.pushPending(context);
-                    Context.pushActive(newContext);
+                    com.bai.env.context.pushPending(context);
+                    com.bai.env.context.pushActive(newContext);
                 }
             } else if (exit.isEmpty()) {
                 switchContext = true;
                 if (context.equals(newContext)) {
-                    Context.pushActive(context);
+                    com.bai.env.context.pushActive(context);
                 } else {
-                    Context.pushPending(context);
-                    Context.pushActive(newContext);
+                    com.bai.env.context.pushPending(context);
+                    com.bai.env.context.pushActive(newContext);
                 }
             } else {
                 for (JImmutableMap.Entry<ALoc, KSet> entry : exit) {
@@ -783,8 +782,8 @@ public class PcodeVisitor {
         boolean isSingleton = (functionSet.size()) == 1;
 
         AbsEnv resEnv = new AbsEnv();
-        Set<Context> targets = new HashSet<>();
-        Context pending = context;
+        Set<com.bai.env.context> targets = new HashSet<>();
+        com.bai.env.context pending = context;
 
         for (Pair<Function, Address> pair : functionSet) {
             Function callee = pair.getLeft();
@@ -813,7 +812,7 @@ public class PcodeVisitor {
                 isExitEmpty |= status.isExitEmpty;
                 isFinished = isFinished & status.isFinished;
             } else {
-                Context newContext = Context.getContext(context, callSite, callee);
+                com.bai.env.context newContext = com.bai.env.context.getContext(context, callSite, callee);
                 if (callee.hasNoReturn()) {
                     newContext.initContext(inOutEnv, false);
                     noReturn = true;
@@ -852,20 +851,20 @@ public class PcodeVisitor {
         }
         if (isExitEmpty) {
             switchContext = true;
-            for (Context context : targets) {
-                Context.pushActive(context);
+            for (com.bai.env.context context : targets) {
+                com.bai.env.context.pushActive(context);
             }
-            Context.pushPending(pending);
+            com.bai.env.context.pushPending(pending);
             return;
         }
 
         if (isTotalUpdated) {
             context.insertToWorklist(callSite);
             switchContext = true;
-            for (Context context : targets) {
-                Context.pushActive(context);
+            for (com.bai.env.context context : targets) {
+                com.bai.env.context.pushActive(context);
             }
-            Context.pushPending(pending);
+            com.bai.env.context.pushPending(pending);
             return;
         }
 
@@ -922,11 +921,11 @@ public class PcodeVisitor {
             return;
         }
         for (long[] cs : callStringSet) {
-            Context callerCtx = Context.getContext(lastFunction, cs);
+            com.bai.env.context callerCtx = com.bai.env.context.getContext(lastFunction, cs);
             if (callerCtx != null) {
                 callerCtx.insertToWorklist(lastCallSite);
-                if (!Context.isWait(callerCtx)) {
-                    Context.pushActive(callerCtx);
+                if (!com.bai.env.context.isWait(callerCtx)) {
+                    com.bai.env.context.pushActive(callerCtx);
                 }
             }
         }

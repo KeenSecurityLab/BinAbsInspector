@@ -3,7 +3,7 @@ import ghidra.program.model.listing.Function;
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.Interval;
 import com.bai.env.KSet;
 import com.bai.env.region.Local;
@@ -45,7 +45,7 @@ public class LoopBoundTest {
         public void test_loop_non_negative_inc() {
             Address cbranchAddress = GlobalState.flatAPI.toAddr(0x1046c);
             Function mainFunction = GlobalState.flatAPI.getGlobalFunctions("main").get(0);
-            Context emptyContext = Context.getEntryContext(mainFunction);
+            context emptyContext = context.getEntryContext(mainFunction);
             ConstraintSolver constraintSolver = new ConstraintSolver();
             constraintSolver.initialize(
                     PcodeVisitor.getConstraintBasicBlock(cbranchAddress),
@@ -73,7 +73,7 @@ public class LoopBoundTest {
         public void test_loop_non_negative_dec() {
             Address cbranchAddress = GlobalState.flatAPI.toAddr(0x104b8);
             Function mainFunction = GlobalState.flatAPI.getGlobalFunctions("main").get(0);
-            Context emptyContext = Context.getEntryContext(mainFunction);
+            context emptyContext = context.getEntryContext(mainFunction);
             ConstraintSolver constraintSolver = new ConstraintSolver();
             constraintSolver.initialize(
                     PcodeVisitor.getConstraintBasicBlock(cbranchAddress),
@@ -101,7 +101,7 @@ public class LoopBoundTest {
         public void test_loop_negative_inc() {
             Address cbranchAddress = GlobalState.flatAPI.toAddr(0x10504);
             Function mainFunction = GlobalState.flatAPI.getGlobalFunctions("main").get(0);
-            Context emptyContext = Context.getEntryContext(mainFunction);
+            context emptyContext = context.getEntryContext(mainFunction);
             ConstraintSolver constraintSolver = new ConstraintSolver();
             constraintSolver.initialize(
                     PcodeVisitor.getConstraintBasicBlock(cbranchAddress),
@@ -129,7 +129,7 @@ public class LoopBoundTest {
         public void test_loop_negative_dec() {
             Address cbranchAddress = GlobalState.flatAPI.toAddr(0x10550);
             Function mainFunction = GlobalState.flatAPI.getGlobalFunctions("main").get(0);
-            Context emptyContext = Context.getEntryContext(mainFunction);
+            context emptyContext = context.getEntryContext(mainFunction);
             ConstraintSolver constraintSolver = new ConstraintSolver();
             constraintSolver.initialize(
                     PcodeVisitor.getConstraintBasicBlock(cbranchAddress),
@@ -157,7 +157,7 @@ public class LoopBoundTest {
         public void test_loop_inc() {
             Address cbranchAddress = GlobalState.flatAPI.toAddr(0x10598);
             Function mainFunction = GlobalState.flatAPI.getGlobalFunctions("main").get(0);
-            Context emptyContext = Context.getEntryContext(mainFunction);
+            context emptyContext = context.getEntryContext(mainFunction);
             ConstraintSolver constraintSolver = new ConstraintSolver();
             constraintSolver.initialize(
                     PcodeVisitor.getConstraintBasicBlock(cbranchAddress),
@@ -187,7 +187,7 @@ public class LoopBoundTest {
         public void test_loop_dec() {
             Address cbranchAddress = GlobalState.flatAPI.toAddr(0x105e4);
             Function mainFunction = GlobalState.flatAPI.getGlobalFunctions("main").get(0);
-            Context emptyContext = Context.getEntryContext(mainFunction);
+            context emptyContext = context.getEntryContext(mainFunction);
             ConstraintSolver constraintSolver = new ConstraintSolver();
             constraintSolver.initialize(
                     PcodeVisitor.getConstraintBasicBlock(cbranchAddress),
@@ -221,7 +221,7 @@ public class LoopBoundTest {
             }
         }
 
-        private ALoc setupStackVar(Address address, Function func, Context context) {
+        private ALoc setupStackVar(Address address, Function func, context context) {
             AbsEnv absEnv = new AbsEnv();
             Local local = Local.getLocal(func);
             absEnv.set(Reg.getALoc("RBP"), new KSet(64).insert(new AbsVal(local, 0)), true);
@@ -243,7 +243,7 @@ public class LoopBoundTest {
         public void test_loop_non_negative_inc() {
             Address cbranchAddress = GlobalState.flatAPI.toAddr(0x1006b0);
             Function mainFunction = GlobalState.flatAPI.getGlobalFunctions("main").get(0);
-            Context emptyContext = Context.getEntryContext(mainFunction);
+            context emptyContext = context.getEntryContext(mainFunction);
 
             ALoc varALoc = setupStackVar(cbranchAddress, mainFunction, emptyContext);
             ConstraintSolver constraintSolver = new ConstraintSolver();
@@ -273,7 +273,7 @@ public class LoopBoundTest {
         public void test_loop_non_negative_dec() {
             Address cbranchAddress = GlobalState.flatAPI.toAddr(0x1006db);
             Function mainFunction = GlobalState.flatAPI.getGlobalFunctions("main").get(0);
-            Context emptyContext = Context.getEntryContext(mainFunction);
+            context emptyContext = context.getEntryContext(mainFunction);
 
             ALoc varALoc = setupStackVar(cbranchAddress, mainFunction, emptyContext);
             ConstraintSolver constraintSolver = new ConstraintSolver();
@@ -304,7 +304,7 @@ public class LoopBoundTest {
         public void test_loop_negative_inc() {
             Address cbranchAddress = GlobalState.flatAPI.toAddr(0x100706);
             Function mainFunction = GlobalState.flatAPI.getGlobalFunctions("main").get(0);
-            Context emptyContext = Context.getEntryContext(mainFunction);
+            context emptyContext = context.getEntryContext(mainFunction);
 
             ALoc varALoc = setupStackVar(cbranchAddress, mainFunction, emptyContext);
             ConstraintSolver constraintSolver = new ConstraintSolver();
@@ -334,7 +334,7 @@ public class LoopBoundTest {
         public void test_loop_negative_dec() {
             Address cbranchAddress = GlobalState.flatAPI.toAddr(0x100731);
             Function mainFunction = GlobalState.flatAPI.getGlobalFunctions("main").get(0);
-            Context emptyContext = Context.getEntryContext(mainFunction);
+            context emptyContext = context.getEntryContext(mainFunction);
 
             ALoc varALoc = setupStackVar(cbranchAddress, mainFunction, emptyContext);
             ConstraintSolver constraintSolver = new ConstraintSolver();
@@ -364,7 +364,7 @@ public class LoopBoundTest {
         public void test_loop_inc() {
             Address cbranchAddress = GlobalState.flatAPI.toAddr(0x100765);
             Function mainFunction = GlobalState.flatAPI.getGlobalFunctions("main").get(0);
-            Context emptyContext = Context.getEntryContext(mainFunction);
+            context emptyContext = context.getEntryContext(mainFunction);
 
             ALoc varALoc = setupStackVar(cbranchAddress, mainFunction, emptyContext);
             ConstraintSolver constraintSolver = new ConstraintSolver();
@@ -394,7 +394,7 @@ public class LoopBoundTest {
         public void test_loop_dec() {
             Address cbranchAddress = GlobalState.flatAPI.toAddr(0x100799);
             Function mainFunction = GlobalState.flatAPI.getGlobalFunctions("main").get(0);
-            Context emptyContext = Context.getEntryContext(mainFunction);
+            context emptyContext = context.getEntryContext(mainFunction);
 
             ALoc varALoc = setupStackVar(cbranchAddress, mainFunction, emptyContext);;
             ConstraintSolver constraintSolver = new ConstraintSolver();

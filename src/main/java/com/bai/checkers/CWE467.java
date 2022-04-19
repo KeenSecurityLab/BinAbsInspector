@@ -2,7 +2,7 @@ package com.bai.checkers;
 
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.util.CWEReport;
 import com.bai.util.GlobalState;
@@ -82,7 +82,7 @@ public class CWE467 extends CheckerBase {
                 }
                 Logging.debug(fromAddress + " -> " + toAddress + " " + callee.getName());
                 // Get the list of contexts for the current function
-                for (Context context : Context.getContext(caller)) {
+                for (com.bai.env.context context : context.getContext(caller)) {
                     AbsEnv absEnv = context.getAbsEnvIn().get(fromAddress);
                     if (absEnv == null) {
                         continue;

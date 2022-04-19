@@ -3,7 +3,7 @@ package com.bai.env.funcs.externalfuncs;
 
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import ghidra.program.model.listing.Function;
 import ghidra.program.model.pcode.PcodeOp;
@@ -27,7 +27,7 @@ public class TopResultFunction extends ExternalFunctionBase {
     }
 
     @Override
-    public void invoke(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, Context context, Function callFunc) {
+    public void invoke(PcodeOp pcode, AbsEnv inOutEnv, AbsEnv tmpEnv, context context, Function callFunc) {
         ALoc retALoc = getReturnALoc(callFunc, false);
         if (retALoc == null) {
             return;

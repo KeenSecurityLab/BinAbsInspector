@@ -3,7 +3,7 @@ package com.bai.env.funcs.externalfuncs;
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.env.TaintMap;
 import com.bai.env.region.Reg;
@@ -79,7 +79,7 @@ public abstract class InputVarArgsFunctionBase extends VarArgsFunctionBase {
         }
     }
 
-    public void invoke(PcodeOp pcodeOp, AbsEnv inOutEnv, AbsEnv tmpEnv, Context context, Function callFunc) {
+    public void invoke(PcodeOp pcodeOp, AbsEnv inOutEnv, AbsEnv tmpEnv, context context, Function callFunc) {
         super.invoke(pcodeOp, inOutEnv, tmpEnv, context, callFunc);
         long newTaints = TaintMap.getTaints(context, callFunc);
         taintVarArgs(pcodeOp, inOutEnv, callFunc, newTaints);

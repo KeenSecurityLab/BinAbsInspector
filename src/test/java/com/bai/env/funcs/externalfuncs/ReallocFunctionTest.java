@@ -4,7 +4,7 @@ import com.bai.Utils;
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.env.region.Heap;
 import ghidra.program.model.data.DataType;
@@ -21,7 +21,7 @@ public class ReallocFunctionTest extends ARMProgramTestBase {
     @Test
     public void testInvoke() {
         PcodeOp pcode = Utils.getMockCallPcodeOp();
-        Context mockContext = Mockito.mock(Context.class);
+        context mockContext = Mockito.mock(context.class);
         Function mockRealloc = Utils.getMockFunction("realloc",
                 new DataType[]{PointerDataType.dataType, IntegerDataType.dataType}, PointerDataType.dataType);
 

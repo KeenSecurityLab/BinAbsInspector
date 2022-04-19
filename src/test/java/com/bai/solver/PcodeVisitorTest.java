@@ -7,7 +7,7 @@ import com.bai.Utils;
 import com.bai.env.ALoc;
 import com.bai.env.AbsEnv;
 import com.bai.env.AbsVal;
-import com.bai.env.Context;
+import com.bai.env.context;
 import com.bai.env.KSet;
 import com.bai.env.region.Global;
 import com.bai.env.region.Local;
@@ -36,7 +36,7 @@ public class PcodeVisitorTest extends ARMProgramTestBase {
 
     @Before
     public void setUpVisitor() {
-        Context context = Mockito.mock(Context.class);
+        context context = Mockito.mock(com.bai.env.context.class);
         when(context.getFunction()).thenReturn(mockFunction);
         visitor = new PcodeVisitor(context);
     }
