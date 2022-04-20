@@ -10,11 +10,11 @@ BinAbsInspector (Binary Abstract Inspector) is a static analyzer for automated r
     1. You can download suitable pre-build package from [here](https://github.com/Z3Prover/z3/releases), extract the zip file and copy `z3-${version}-win/bin/*.so` to `/usr/local/lib/`
     2. or you can build and install z3 according to [Building Z3 using make and GCC/Clang](https://github.com/Z3Prover/z3#building-z3-using-make-and-gccclang)
   + For MacOS, it is similar to Linux.
-+ Download the extension zip file from [release page](https://github.com/zyq8709/BinAbsInspector/releases/tag/release)
++ Download the extension zip file from [release page](https://github.com/KeenSecurityLab/BinAbsInspector/releases)
 + Install the extension according to [Ghidra Extension Notes](https://ghidra-sre.org/InstallationGuide.html#GhidraExtensionNotes)
 
 # Building
-Build the extension by yourself, if you want to develop a new feature, please refer to [developing guide](./doc/developer_guide.md).
+Build the extension by yourself, if you want to develop a new feature, please refer to [development guide](https://github.com/KeenSecurityLab/BinAbsInspector/wiki/Developer-Guide).
 + Install Ghidra and Z3
 + Install [Gradle 7.x](https://gradle.org/releases/) (tested version: 7.4)
 + Pull the repository
@@ -34,8 +34,8 @@ $GHIDRA_INSTALL_DIR/support/analyzeHeadless <projectPath> <projectName> -import 
 
 | Parameter                                 | Description                           |
 | ----------------------------------------- | --------------------------------------|
-| `[-K <kElement>]`                         | KSet size limit [K](./doc/technical_details.md#KSet)             |
-| `[-callStringK <callStringMaxLen>]`       | Call string maximum length [K](./doc/technical_details.md#Context)|
+| `[-K <kElement>]`                         | KSet size limit [K](https://github.com/KeenSecurityLab/BinAbsInspector/wiki/Technical-Details#kset)             |
+| `[-callStringK <callStringMaxLen>]`       | Call string maximum length [K](https://github.com/KeenSecurityLab/BinAbsInspector/wiki/Technical-Details#context)|
 | `[-Z3Timeout <timeout>]`                  | Z3 timeout                            |
 | `[-timeout <timeout>]`                    | Analysis timeout                      |
 | `[-entry <address>]`                      | Entry address                         |
@@ -78,7 +78,7 @@ So far BinAbsInspector supports following checkers:
 + [CWE787](https://cwe.mitre.org/data/definitions/787.html) (Buffer Overflow (Out-of-bounds Write))
 
 # Project Structure
-The structure of this project is as follows, please refer to [technical details](./doc/technical_details.md) for more details.
+The structure of this project is as follows, please refer to [technical details](https://github.com/KeenSecurityLab/BinAbsInspector/wiki/Technical-Details) for more details.
 ```
 ├── main
 │   ├── java
