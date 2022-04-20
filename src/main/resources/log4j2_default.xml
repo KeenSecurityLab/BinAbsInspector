@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout disableAnsi="false" pattern="%highlight{[%-5level - %logger{36}]}{FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=white, TRACE=blue} %msg%n%throwable
+"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="BinAbsInspector" level="info" additivity="false">>
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="CWE" level="warn" additivity="false">>
+            <AppenderRef ref="Console" />
+        </Logger>
+        <Root level="error">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>

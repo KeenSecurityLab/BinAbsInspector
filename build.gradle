@@ -1,0 +1,124 @@
+// Builds a Ghidra Extension for a given Ghidra installation.
+//
+// An absolute path to the Ghidra installation directory must be supplied either by setting the 
+// GHIDRA_INSTALL_DIR environment variable or Gradle project property:
+//
+//     > export GHIDRA_INSTALL_DIR=<Absolute path to Ghidra> 
+//     > gradle
+//
+//         or
+//
+//     > gradle -PGHIDRA_INSTALL_DIR=<Absolute path to Ghidra>
+//
+// Gradle should be invoked from the directory of the project to build.  Please see the
+// application.gradle.version property in <GHIDRA_INSTALL_DIR>/Ghidra/application.properties
+// for the correction version of Gradle to use for the Ghidra installation you specify.
+
+plugins {
+	id("net.ltgt.errorprone") version "2.0.2"
+	id "com.coditory.integration-test" version "1.3.0"
+	id "jacoco"
+}
+
+//----------------------START "DO NOT MODIFY" SECTION------------------------------
+def ghidraInstallDir
+
+if (System.env.GHIDRA_INSTALL_DIR) {
+	ghidraInstallDir = System.env.GHIDRA_INSTALL_DIR
+}
+else if (project.hasProperty("GHIDRA_INSTALL_DIR")) {
+	ghidraInstallDir = project.getProperty("GHIDRA_INSTALL_DIR")
+}
+
+if (ghidraInstallDir) {
+	apply from: new File(ghidraInstallDir).getCanonicalPath() + "/support/buildExtension.gradle"
+}
+else {
+	throw new GradleException("GHIDRA_INSTALL_DIR is not defined!")
+}
+//----------------------END "DO NOT MODIFY" SECTION-------------------------------
+
+repositories {
+	mavenCentral()
+}
+
+sourceSets {
+	main {
+		java {
+			srcDirs = ['src/main/java', 'ghidra_scripts']
+		}
+		resources {
+			srcDirs = ['src/main/resources']
+		}
+	}
+	test {
+		java {
+			srcDirs = ['src/test/java']
+		}
+		resources {
+			srcDirs = ['src/test/resources']
+		}
+	}
+	integration {
+		java {
+			srcDirs = ['src/integration/java']
+		}
+		resources {
+			srcDirs = ['src/integration/resources']
+		}
+	}
+}
+
+jacocoTestReport {
+	reports {
+		xml.required = true
+	}
+}
+
+[compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+tasks.withType(Test) {
+	useJUnit()
+	forkEvery = 4
+	maxHeapSize = "2G"
+	testLogging {
+		events "passed", "skipped", "failed"
+		showExceptions true
+		exceptionFormat "full"
+		showCauses true
+		showStackTraces true
+		showStandardStreams = false
+	}
+	systemProperty "debug", "1"
+	finalizedBy jacocoTestReport
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.compilerArgs.add("-Xlint:unchecked")
+	options.compilerArgs.add("-Xlint:deprecation")
+	options.warnings = false
+}
+
+javadoc {
+	exclude "**/ConfigDialog.java"
+	exclude "**/BinAbsInpsector.java"
+	exclude "com/bai/solver/GraphBase.java"
+	exclude "com/bai/solver/PcodeVisitor.java"
+	exclude "com/bai/solver/Worklist.java"
+	exclude "com/bai/solver/ConstraintSolver.java"
+	exclude "com/bai/env/Interval.java"
+
+	options.memberLevel = JavadocMemberLevel.PUBLIC
+	source = sourceSets.main.allJava
+}
+
+dependencies {
+	testImplementation "junit:junit:4.13.2"
+	testImplementation 'org.mockito:mockito-core:4.0.0'
+	implementation files('lib/javimmutable-collections-2.4.1.jar')
+	implementation files('lib/com.microsoft.z3.jar')
+	implementation files('lib/forms_rt.jar')
+	implementation 'com.google.errorprone:error_prone_annotations:2.10.0'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.2'
+	implementation 'org.apache.logging.log4j:log4j-layout-template-json:2.17.2'
+	errorprone("com.google.errorprone:error_prone_core:2.10.0")
+}

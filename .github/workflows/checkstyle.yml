@@ -1,0 +1,21 @@
+name: CheckStyle
+
+on:
+  push:
+    branches: [ '*' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run java checkstyle
+        uses: nikitasavinov/checkstyle-action@0.5.1
+        with:
+          checkstyle_version: '8.32'
+          checkstyle_config: './.github/workflows/checks_rules.xml'
+          fail_on_error: true
+          level: error
+          reporter: 'github-pr-check'
