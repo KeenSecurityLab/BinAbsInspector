@@ -69,7 +69,7 @@ public class BinAbsInspector extends GhidraScript {
      * Start analysis with following steps:
      * 1. Start from specific address if user provided, the address must be the entrypoint of a function.
      * 2. Start from "main" function if step 1 fails.
-	 * 3. Start from "entry" function if step 2 fails.
+     * 3. Start from "entry" function if step 2 fails.
      * 4. Start from "e_entry" address from ELF header if step 2 fails.
      * @return
      */
@@ -85,11 +85,11 @@ public class BinAbsInspector extends GhidraScript {
             return analyzeFromAddress(entryAddress);
         } else {
             if (!analyzeFromFunction("main", true) && !analyzeFromFunction("entry", false)) {
-				GlobalState.eEntryFunction = Utils.getEntryFunction();
-				if (GlobalState.eEntryFunction == null) {
-					Logging.error("Cannot find entry function, maybe unsupported file format or corrupted header.");
-					return false;
-				}
+                GlobalState.eEntryFunction = Utils.getEntryFunction();
+                if (GlobalState.eEntryFunction == null) {
+                    Logging.error("Cannot find entry function, maybe unsupported file format or corrupted header.");
+                    return false;
+                }
                 Logging.info("Start from entrypoint");
                 Logging.info("Running solver on \"" + GlobalState.eEntryFunction + "()\" function");
                 InterSolver solver = new InterSolver(GlobalState.eEntryFunction, false);
