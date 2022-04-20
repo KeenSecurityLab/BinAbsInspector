@@ -37,8 +37,8 @@ public class BinAbsInspector extends GhidraScript {
         return language != null;
     }
 
-    protected boolean analyzeFromMain() {
-        List<Function> functions = GlobalState.currentProgram.getListing().getGlobalFunctions("main");
+    protected boolean analyzeFromFunction(String functionName, boolean isMain) {
+        List<Function> functions = GlobalState.currentProgram.getListing().getGlobalFunctions(functionName);
         if (functions == null || functions.size() == 0) {
             return false;
         }
@@ -48,7 +48,7 @@ public class BinAbsInspector extends GhidraScript {
             return false;
         }
         Logging.info("Running solver on \"" + entryFunction + "()\" function");
-        InterSolver solver = new InterSolver(entryFunction, true);
+        InterSolver solver = new InterSolver(entryFunction, isMain);
         solver.run();
         return true;
     }
@@ -69,7 +69,8 @@ public class BinAbsInspector extends GhidraScript {
      * Start analysis with following steps:
      * 1. Start from specific address if user provided, the address must be the entrypoint of a function.
      * 2. Start from "main" function if step 1 fails.
-     * 3. Start from "e_entry" address from ELF header if step 2 fails.
+	 * 3. Start from "entry" function if step 2 fails.
+     * 4. Start from "e_entry" address from ELF header if step 2 fails.
      * @return
      */
     protected boolean analyze() {
@@ -83,12 +84,12 @@ public class BinAbsInspector extends GhidraScript {
             Address entryAddress = GlobalState.flatAPI.toAddr(entryAddressStr);
             return analyzeFromAddress(entryAddress);
         } else {
-            GlobalState.eEntryFunction = Utils.getEntryFunction();
-            if (GlobalState.eEntryFunction == null) {
-                Logging.error("Cannot find entry function, maybe unsupported file format or corrupted header.");
-                return false;
-            }
-            if (!analyzeFromMain()) {
+            if (!analyzeFromFunction("main", true) && !analyzeFromFunction("entry", false)) {
+				GlobalState.eEntryFunction = Utils.getEntryFunction();
+				if (GlobalState.eEntryFunction == null) {
+					Logging.error("Cannot find entry function, maybe unsupported file format or corrupted header.");
+					return false;
+				}
                 Logging.info("Start from entrypoint");
                 Logging.info("Running solver on \"" + GlobalState.eEntryFunction + "()\" function");
                 InterSolver solver = new InterSolver(GlobalState.eEntryFunction, false);
