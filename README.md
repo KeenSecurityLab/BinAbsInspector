@@ -56,8 +56,10 @@ $GHIDRA_INSTALL_DIR/support/analyzeHeadless <projectPath> <projectName> -import 
 + With Docker
 
 ```shell
-docker build . -t BinAbsInspector
-docker run -v $(pwd):/data/workspace BinAbsInspector "@@<script parameters>" -import <file>
+git clone git@github.com:KeenSecurityLab/BinAbsInspector.git
+cp BinAbsInspector/Dockerfile ./
+docker build . -t bai
+docker run -v $(pwd):/data/workspace bai "@@<script parameters>" -import <file>
 ```
 
 # Implemented Checkers
