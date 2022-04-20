@@ -26,9 +26,22 @@ import com.bai.util.Logging;
 import com.bai.util.Utils;
 import java.awt.Color;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Collections;
 import org.apache.commons.lang3.StringUtils;
 
 public class BinAbsInspector extends GhidraScript {
+
+    private static final Map<String, Boolean> genericEntryPoints = createEntryPointsMap();
+
+    private static Map<String, Boolean> createEntryPointsMap() {
+        Map<String, Boolean> result = new HashMap<>();
+        result.put("main", true);
+        result.put("WinMain", false);
+        result.put("entry", false);
+        return Collections.unmodifiableMap(result);
+    }
 
     protected boolean prepareProgram() {
         GlobalState.currentProgram = this.currentProgram;
@@ -68,9 +81,8 @@ public class BinAbsInspector extends GhidraScript {
     /**
      * Start analysis with following steps:
      * 1. Start from specific address if user provided, the address must be the entrypoint of a function.
-     * 2. Start from "main" function if step 1 fails.
-     * 3. Start from "entry" function if step 2 fails.
-     * 4. Start from "e_entry" address from ELF header if step 2 fails.
+     * 2. Try to locate some generic entry points
+     * 3. Start from "e_entry" address from ELF header if step 2 fails.
      * @return
      */
     protected boolean analyze() {
@@ -84,18 +96,25 @@ public class BinAbsInspector extends GhidraScript {
             Address entryAddress = GlobalState.flatAPI.toAddr(entryAddressStr);
             return analyzeFromAddress(entryAddress);
         } else {
-            if (!analyzeFromFunction("main", true) && !analyzeFromFunction("entry", false)) {
-                GlobalState.eEntryFunction = Utils.getEntryFunction();
-                if (GlobalState.eEntryFunction == null) {
-                    Logging.error("Cannot find entry function, maybe unsupported file format or corrupted header.");
-                    return false;
+            for (Map.Entry<String, Boolean> entry : genericEntryPoints.entrySet()) {
+                String functionName = entry.getKey();
+                boolean isMain = entry.getValue();
+
+                if(analyzeFromFunction(functionName, isMain)) {
+                    return true;
                 }
-                Logging.info("Start from entrypoint");
-                Logging.info("Running solver on \"" + GlobalState.eEntryFunction + "()\" function");
-                InterSolver solver = new InterSolver(GlobalState.eEntryFunction, false);
-                solver.run();
-                return true;
             }
+
+            GlobalState.eEntryFunction = Utils.getEntryFunction();
+            if (GlobalState.eEntryFunction == null) {
+                Logging.error("Cannot find entry function, maybe unsupported file format or corrupted header.");
+                return false;
+            }
+            
+            Logging.info("Start from entrypoint");
+            Logging.info("Running solver on \"" + GlobalState.eEntryFunction + "()\" function");
+            InterSolver solver = new InterSolver(GlobalState.eEntryFunction, false);
+            solver.run();
         }
         return true;
     }
