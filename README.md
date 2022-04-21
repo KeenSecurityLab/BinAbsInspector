@@ -5,6 +5,7 @@ BinAbsInspector (Binary Abstract Inspector) is a static analyzer for automated r
 # Installation
 + Install Ghidra according to [Ghidra's documentation](https://github.com/NationalSecurityAgency/ghidra#install)
 + Install [Z3](https://github.com/Z3Prover/z3) (tested version: 4.8.15)
++ Note that generally there are two parts for Z3 library: one is Java package, the other one is native library. The Java package is already included in "/lib" directory, but we suggest that you replace it with your own Java package for version compatibility.
   + For Windows, download a pre-built package from [here](https://github.com/Z3Prover/z3/releases), extract the zip file and add a PATH environment variable pointing to `z3-${version}-win/bin`
   + For Linux, install with package manager is NOT recommended, there are two options:
     1. You can download suitable pre-build package from [here](https://github.com/Z3Prover/z3/releases), extract the zip file and copy `z3-${version}-win/bin/*.so` to `/usr/local/lib/`
