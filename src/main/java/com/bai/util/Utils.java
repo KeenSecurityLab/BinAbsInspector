@@ -355,7 +355,7 @@ public class Utils {
             Address entryAddress;
             String executableFormat = GlobalState.currentProgram.getExecutableFormat();
             
-            switch(executableFormat) {
+            switch (executableFormat) {
                 case ElfLoader.ELF_NAME: {
                     ElfHeader header = ElfHeader.createElfHeader(RethrowContinuesFactory.INSTANCE, provider);
                     entryAddress = GlobalState.flatAPI.toAddr(header.e_entry());
@@ -367,7 +367,8 @@ public class Utils {
                 break;
 
                 case PeLoader.PE_NAME: {
-                    PortableExecutable pe = PortableExecutable.createPortableExecutable(RethrowContinuesFactory.INSTANCE, provider, PortableExecutable.SectionLayout.MEMORY);
+                    PortableExecutable pe = PortableExecutable.createPortableExecutable(
+                            RethrowContinuesFactory.INSTANCE, provider, PortableExecutable.SectionLayout.MEMORY);
                     OptionalHeader header = pe.getNTHeader().getOptionalHeader();
                     entryAddress = GlobalState.flatAPI.toAddr(header.getAddressOfEntryPoint());
                     entryAddress = entryAddress.add(GlobalState.currentProgram.getImageBase().getOffset());
