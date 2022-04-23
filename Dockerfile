@@ -18,7 +18,7 @@ RUN echo 'debconf debconf/frontend select Noninteractive' > /debconf-seed.txt &&
 RUN sed -i "s/archive.ubuntu.com/${UBUNTU_MIRROR}/g" /etc/apt/sources.list
 
 RUN apt-get update -qq && apt-get install -y \
-        wget unzip make cmake build-essential python3-distutils
+        wget unzip make cmake build-essential
 
 # Ghidra installation
 
@@ -34,7 +34,7 @@ RUN wget https://github.com/NationalSecurityAgency/ghidra/releases/download/${GH
 ENV PATH="/opt/ghidra:/opt/ghidra/support:${PATH}"
 ENV GHIDRA_INSTALL_DIR="/opt/ghidra"
 
-ARG Z3_VERSION="4.8.14"
+ARG Z3_VERSION="4.8.15"
 RUN mkdir /opt/z3 && cd /opt/z3 \
     && wget -qO- https://github.com/Z3Prover/z3/archive/z3-${Z3_VERSION}.tar.gz | tar xz --strip-components=1 \
     && mkdir build && cd build && cmake \
@@ -44,20 +44,20 @@ RUN mkdir /opt/z3 && cd /opt/z3 \
         && make -j8 && make install \
     && cp /opt/z3/build/*.so /lib64
 
-RUN mkdir -p /data/workspace
-COPY BinAbsInspector /data/workspace/BinAbsInspector
+COPY ghidra_scripts /data/workspace/BinAbsInspector/ghidra_scripts
+COPY lib /data/workspace/BinAbsInspector/lib
+COPY src /data/workspace/BinAbsInspector/src
+COPY build.gradle extension.properties Module.manifest /data/workspace/BinAbsInspector/
 
-WORKDIR /data/workspace
+WORKDIR /data/workspace/BinAbsInspector
 
 # Build extension
-RUN cd BinAbsInspector \
-        && gradle compileJava --warning-mode all \
+RUN gradle compileJava --warning-mode all \
         && gradle buildExtension --warning-mode all
 
 # Install extension
-RUN mkdir -p "${HOME}/.ghidra/.${GHIDRA_VERSION}/Extensions" && \
-        cp BinAbsInspector/dist/*.zip "${HOME}/.ghidra/.${GHIDRA_VERSION}/Extensions" && \
-        cd "${HOME}/.ghidra/.${GHIDRA_VERSION}/Extensions" && unzip *.zip
+RUN cp dist/*.zip "${GHIDRA_INSTALL_DIR}/Ghidra/Extensions" && \
+        cd "${GHIDRA_INSTALL_DIR}/Ghidra/Extensions" && unzip *.zip
 
 # Provide an easy way to run the plugin
 ENTRYPOINT ["analyzeHeadless", "~", "tmp", "-deleteProject", "-overwrite", "-postScript", "BinAbsInspector.java"]
