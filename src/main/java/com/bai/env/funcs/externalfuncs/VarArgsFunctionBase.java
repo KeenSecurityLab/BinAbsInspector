@@ -24,6 +24,7 @@ import ghidra.program.model.pcode.HighFunctionDBUtil;
 import ghidra.program.model.pcode.PcodeOp;
 import ghidra.program.model.symbol.Namespace;
 import ghidra.program.model.symbol.Symbol;
+import ghidra.program.model.symbol.SymbolType;
 import ghidra.program.model.symbol.SymbolTable;
 import ghidra.util.exception.InvalidInputException;
 import com.bai.util.Logging;
@@ -151,7 +152,7 @@ public abstract class VarArgsFunctionBase extends ExternalFunctionBase {
      */
     public static FunctionDefinition getVarArgsSignature(Address address) {
         Symbol[] symbols = GlobalState.currentProgram.getSymbolTable().getSymbols(address);
-        if (symbols == null || symbols.length == 0) {
+        if (symbols == null || symbols.length == 0 || symbols[0].getSymbolType() != SymbolType.LABEL) {
             return null;
         }
         DataTypeSymbol symbol = HighFunctionDBUtil.readOverride(symbols[0]);
