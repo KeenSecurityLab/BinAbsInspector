@@ -142,6 +142,7 @@ public class MemoryCorruption {
                     break;
                 default: // nothing
             }
+            details += " for chunk allocated at " + chunk.getAllocAddress() + ", when access";
             CWEReport report = new CWEReport(CWE416, VERSION, details)
                     .setAddress(address)
                     .setContext(context);
@@ -192,6 +193,7 @@ public class MemoryCorruption {
                 default: // nothing
             }
             Logging.debug("Check OOB for: " + ptr + " at " + address.toString() + "," + context.toString());
+            details += " for chunk allocated at " + ((Heap) ptr.getRegion()).getAllocAddress() + ", when access";
             CWEReport report = new CWEReport(cwe, VERSION, details)
                     .setAddress(address)
                     .setContext(context);
