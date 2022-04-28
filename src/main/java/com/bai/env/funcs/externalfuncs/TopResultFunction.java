@@ -16,7 +16,7 @@ import java.util.Set;
  */
 public class TopResultFunction extends ExternalFunctionBase {
 
-    private static final Set<String> staticSymbols = Set.of("strncmp", "strcmp");
+    private static final Set<String> staticSymbols = Set.of("strncmp", "strcmp", "setitimer");
 
     public TopResultFunction() {
         super(staticSymbols);
