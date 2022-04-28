@@ -13,6 +13,7 @@ import com.bai.env.funcs.externalfuncs.GetenvFunction;
 import com.bai.env.funcs.externalfuncs.GetsFunction;
 import com.bai.env.funcs.externalfuncs.LibcStartMainFunction;
 import com.bai.env.funcs.externalfuncs.MallocFunction;
+import com.bai.env.funcs.externalfuncs.MallocUsableSizeFunction;
 import com.bai.env.funcs.externalfuncs.MemcpyFunction;
 import com.bai.env.funcs.externalfuncs.PrintfFunction;
 import com.bai.env.funcs.externalfuncs.PutsFunction;
@@ -56,6 +57,7 @@ public class FunctionModelManager {
             new CallocFunction(),
             new ReallocFunction(),
             new FreeFunction(),
+            new MallocUsableSizeFunction(),
             // String function
             new StrcatFunction(),
             new StrlenFunction(),
