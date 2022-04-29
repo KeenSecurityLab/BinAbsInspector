@@ -43,7 +43,7 @@ $GHIDRA_INSTALL_DIR/support/analyzeHeadless <projectPath> <projectName> -import 
 | `[-externalMap <file>]`                   | External function model config        |
 | `[-json]`                                 | Output in json format                 |
 | `[-disableZ3]`                            | Disable Z3                            |
-| `[-all]`                                  | Enable all checkers (by default)      |
+| `[-all]`                                  | Enable all checkers                   |
 | `[-debug]`                                | Enable debugging log output           |
 | `[-check "<cweNo1>[;<cweNo2>...]"]`       | Enable specific checkers              |
 
