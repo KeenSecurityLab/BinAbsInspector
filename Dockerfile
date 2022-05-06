@@ -18,7 +18,7 @@ RUN echo 'debconf debconf/frontend select Noninteractive' > /debconf-seed.txt &&
 RUN sed -i "s/archive.ubuntu.com/${UBUNTU_MIRROR}/g" /etc/apt/sources.list
 
 RUN apt-get update -qq && apt-get install -y \
-        wget unzip make cmake build-essential
+        wget unzip make cmake build-essential curl
 
 # Ghidra installation
 
@@ -26,7 +26,7 @@ ARG GHIDRA_RELEASE_TAG=Ghidra_10.1.2_build
 ARG GHIDRA_VERSION=ghidra_10.1.2_PUBLIC
 ARG GHIDRA_BUILD=${GHIDRA_VERSION}_20220125
 
-RUN wget https://github.com/NationalSecurityAgency/ghidra/releases/download/${GHIDRA_RELEASE_TAG}/${GHIDRA_BUILD}.zip && \
+RUN curl -LO https://github.com/NationalSecurityAgency/ghidra/releases/download/${GHIDRA_RELEASE_TAG}/${GHIDRA_BUILD}.zip && \
     unzip -d ghidra ${GHIDRA_BUILD}.zip && \
     rm ${GHIDRA_BUILD}.zip && \
     mv ghidra/ghidra_* /opt/ghidra
