@@ -140,7 +140,7 @@ public class StringUtils {
      * @param absEnv the AbsEnv
      * @return return the index of first found character, -1 if not found.
      */
-    public static int strchr(AbsVal ptrAbsVal, char c, AbsEnv absEnv) {
+    public static int indexOf(AbsVal ptrAbsVal, char c, AbsEnv absEnv) {
         String str = getString(ptrAbsVal, absEnv);
         return str == null ? -1 : str.indexOf(c);
     }

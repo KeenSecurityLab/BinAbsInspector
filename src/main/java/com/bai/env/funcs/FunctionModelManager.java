@@ -26,6 +26,7 @@ import com.bai.env.funcs.externalfuncs.SnprintfFunction;
 import com.bai.env.funcs.externalfuncs.SprintfFunction;
 import com.bai.env.funcs.externalfuncs.SscanfFunction;
 import com.bai.env.funcs.externalfuncs.StrcatFunction;
+import com.bai.env.funcs.externalfuncs.StrchrFunction;
 import com.bai.env.funcs.externalfuncs.StrcpyFunction;
 import com.bai.env.funcs.externalfuncs.StrlenFunction;
 import com.bai.env.funcs.externalfuncs.StrncpyFunction;
@@ -76,6 +77,7 @@ public class FunctionModelManager {
             new ScanfFunction(),
             new SscanfFunction(),
             new FscanfFunction(),
+            new StrchrFunction(),
             // varargs functions
             new PrintfFunction(),
             new SnprintfFunction(),
