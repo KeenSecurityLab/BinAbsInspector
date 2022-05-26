@@ -16,6 +16,6 @@ jobs:
         with:
           checkstyle_version: '8.32'
           checkstyle_config: './.github/workflows/checks_rules.xml'
-          fail_on_error: true
+          fail_on_error: false
           level: error
           reporter: 'github-pr-check'
