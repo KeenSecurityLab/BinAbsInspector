@@ -68,7 +68,7 @@ public class StringUtilsTest extends ARMProgramTestBase {
         AbsVal ptrAbsVal = new AbsVal(Global.getInstance(), 0x2000);
         AbsEnv inOutEnv = new AbsEnv();
 
-        int res = StringUtils.strchr(ptrAbsVal, 'C', inOutEnv);
+        int res = StringUtils.indexOf(ptrAbsVal, 'C', inOutEnv);
         assert res == 2;
 
         inOutEnv = new AbsEnv();
@@ -79,13 +79,13 @@ public class StringUtilsTest extends ARMProgramTestBase {
         ptrALoc = ALoc.getALoc(heap, 0x3004, 4);
         inOutEnv.set(ptrALoc, new KSet(32).insert(new AbsVal(0x4645)), true);
         ptrAbsVal = new AbsVal(heap, 0x3000);
-        res = StringUtils.strchr(ptrAbsVal, 'F', inOutEnv);
+        res = StringUtils.indexOf(ptrAbsVal, 'F', inOutEnv);
         assert res == 5;
 
         ptrALoc = ALoc.getALoc(heap, 0x3008, 8);
         inOutEnv.set(ptrALoc, new KSet(64).insert(new AbsVal(BigInteger.valueOf(0xCCBBAAL))), true);
         ptrAbsVal = new AbsVal(heap, 0x3008);
-        res = StringUtils.strchr(ptrAbsVal, 'A', inOutEnv);
+        res = StringUtils.indexOf(ptrAbsVal, 'A', inOutEnv);
         assert res == -1;
     }
 
