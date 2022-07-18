@@ -247,7 +247,7 @@ public class Context {
         } else {
             offset = entryLocal.getBase();
         }
-        long taints = TaintMap.getTaints(this, GlobalState.eEntryFunction);
+        long taints = TaintMap.getTaints(null, this, GlobalState.eEntryFunction);
         int unit = GlobalState.arch.getDefaultPointerSize();
         for (int i = 0; i < TAINT_ARGV_COUNT; i++) {
             absEnv.set(ALoc.getALoc(entryLocal, offset + ((long) i * unit), unit), KSet.getTop(taints), true);
