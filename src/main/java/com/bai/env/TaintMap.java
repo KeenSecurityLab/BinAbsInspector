@@ -1,5 +1,6 @@
 package com.bai.env;
 
+import ghidra.program.model.address.Address;
 import ghidra.program.model.listing.Function;
 import com.bai.util.Logging;
 import java.util.ArrayList;
@@ -18,12 +19,18 @@ public class TaintMap {
      */
     public static class Source {
 
+        private final Address callSite;
         private final Context context;
         private final Function function;
 
-        public Source(Context context, Function function) {
+        public Source(Address callSite, Context context, Function function) {
+            this.callSite = callSite;
             this.context = context;
             this.function = function;
+        }
+
+        public Address getCallSite() {
+            return callSite;
         }
 
         public Context getContext() {
@@ -43,12 +50,12 @@ public class TaintMap {
                 return false;
             }
             Source source = (Source) o;
-            return Objects.equals(context, source.context) && Objects.equals(function, source.function);
+            return Objects.equals(callSite, source.callSite) && Objects.equals(context, source.context) && Objects.equals(function, source.function);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(context, function);
+            return Objects.hash(callSite, context, function);
         }
     }
 
@@ -64,13 +71,13 @@ public class TaintMap {
         taintSourceToIdMap.clear();
     }
 
-    protected static int getTaintId(Context context, Function function) {
+    protected static int getTaintId(Address callSite, Context context, Function function) {
         if (taintId >= MAX_TAINT_CNT) {
             Logging.error("Taint id number reach " + MAX_TAINT_CNT
                     + "this may lead to false positive.");
             taintId = taintId % MAX_TAINT_CNT;
         }
-        Source src = new Source(context, function);
+        Source src = new Source(callSite, context, function);
         Integer id = taintSourceToIdMap.get(src);
         if (id != null) {
             return id;
@@ -99,12 +106,13 @@ public class TaintMap {
 
     /**
      * Get a taint bitmap for a taint source consisting of a context and a function
+     * @param callSite Call site address of the Function component
      * @param context Context component for a taint source
      * @param function Function component for a taint source
      * @return A taint bitmap for the information of a taint source
      */
-    public static long getTaints(Context context, Function function) {
-        return 1L << getTaintId(context, function);
+    public static long getTaints(Address callSite, Context context, Function function) {
+        return 1L << getTaintId(callSite, context, function);
     }
 
     /**
