@@ -50,7 +50,8 @@ public class TaintMap {
                 return false;
             }
             Source source = (Source) o;
-            return Objects.equals(callSite, source.callSite) && Objects.equals(context, source.context) && Objects.equals(function, source.function);
+            return Objects.equals(callSite, source.callSite) && Objects.equals(context, source.context)
+                    && Objects.equals(function, source.function);
         }
 
         @Override
