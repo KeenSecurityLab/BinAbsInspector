@@ -81,7 +81,7 @@ So far BinAbsInspector supports following checkers:
 + [CWE787](https://cwe.mitre.org/data/definitions/787.html) (Buffer Overflow (Out-of-bounds Write))
 
 # Project Structure
-The structure of this project is as follows, please refer to [technical details](https://github.com/KeenSecurityLab/BinAbsInspector/wiki/Technical-Details) for more details.
+The structure of this project is as follows, please refer to [technical details](https://github.com/KeenSecurityLab/BinAbsInspector/wiki/Technical-Details) or the [Chinese version article](https://keenlab.tencent.com/zh/2022/04/20/2022-BinAbsInspector-public-release/) for more details.
 ```
 ├── main
 │   ├── java
