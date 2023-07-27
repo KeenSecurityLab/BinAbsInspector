@@ -8,7 +8,7 @@ BinAbsInspector (Binary Abstract Inspector) is a static analyzer for automated r
 + Note that generally there are two parts for Z3 library: one is Java package, the other one is native library. The Java package is already included in "/lib" directory, but we suggest that you replace it with your own Java package for version compatibility.
   + For Windows, download a pre-built package from [here](https://github.com/Z3Prover/z3/releases), extract the zip file and add a PATH environment variable pointing to `z3-${version}-win/bin`
   + For Linux, install with package manager is NOT recommended, there are two options:
-    1. You can download suitable pre-build package from [here](https://github.com/Z3Prover/z3/releases), extract the zip file and copy `z3-${version}-win/bin/*.so` to `/usr/local/lib/`
+    1. You can download suitable pre-build package from [here](https://github.com/Z3Prover/z3/releases), extract the zip file and copy `z3-${version}-glibc-${version}/bin/*.so` to `/usr/local/lib/`
     2. or you can build and install z3 according to [Building Z3 using make and GCC/Clang](https://github.com/Z3Prover/z3#building-z3-using-make-and-gccclang)
   + For MacOS, it is similar to Linux.
 + Download the extension zip file from [release page](https://github.com/KeenSecurityLab/BinAbsInspector/releases)
