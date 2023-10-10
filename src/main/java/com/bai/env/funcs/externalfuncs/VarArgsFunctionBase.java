@@ -12,6 +12,7 @@ import ghidra.program.model.address.Address;
 import ghidra.program.model.data.DataTypeManager;
 import ghidra.program.model.data.FunctionDefinition;
 import ghidra.program.model.data.FunctionDefinitionDataType;
+import ghidra.program.model.data.GenericCallingConvention;
 import ghidra.program.model.data.IntegerDataType;
 import ghidra.program.model.data.ParameterDefinition;
 import ghidra.program.model.data.ParameterDefinitionImpl;
@@ -67,7 +68,8 @@ public abstract class VarArgsFunctionBase extends ExternalFunctionBase {
 
         ParameterDefinition[] params = sig.getArguments();
         FunctionDefinitionDataType fsig = new FunctionDefinitionDataType("tmpname");
-        fsig.setGenericCallingConvention(sig.getGenericCallingConvention());
+        fsig.setGenericCallingConvention(
+                GenericCallingConvention.getGenericCallingConvention(sig.getCallingConventionName()));
         fsig.setArguments(params);
         fsig.setReturnType(sig.getReturnType());
         fsig.setVarArgs(sig.hasVarArgs());
