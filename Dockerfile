@@ -1,6 +1,6 @@
 ARG UBUNTU_MIRROR=mirrors.tuna.tsinghua.edu.cn
 
-FROM gradle:7-jdk11
+FROM gradle:7-jdk17
 
 ARG UBUNTU_MIRROR
 # Non-interactive installation requirements
@@ -22,9 +22,9 @@ RUN apt-get update -qq && apt-get install -y \
 
 # Ghidra installation
 
-ARG GHIDRA_RELEASE_TAG=Ghidra_10.1.2_build
-ARG GHIDRA_VERSION=ghidra_10.1.2_PUBLIC
-ARG GHIDRA_BUILD=${GHIDRA_VERSION}_20220125
+ARG GHIDRA_RELEASE_TAG=Ghidra_10.4_build
+ARG GHIDRA_VERSION=ghidra_10.4_PUBLIC
+ARG GHIDRA_BUILD=${GHIDRA_VERSION}_20230928
 
 RUN wget https://github.com/NationalSecurityAgency/ghidra/releases/download/${GHIDRA_RELEASE_TAG}/${GHIDRA_BUILD}.zip && \
     unzip -d ghidra ${GHIDRA_BUILD}.zip && \

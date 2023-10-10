@@ -3,6 +3,7 @@ import com.bai.util.Utils;
 import ghidra.app.plugin.core.analysis.AutoAnalysisManager;
 import ghidra.app.util.importer.AutoImporter;
 import ghidra.app.util.importer.MessageLog;
+import ghidra.app.util.opinion.LoadResults;
 import ghidra.program.flatapi.FlatProgramAPI;
 import ghidra.program.model.address.Address;
 import ghidra.program.model.listing.Function;
@@ -32,14 +33,15 @@ public abstract class IntegrationTestBase extends AbstractGhidraHeadlessIntegrat
 
     protected Program prepareProgram(File file) throws Exception {
         GlobalState.reset();
-        Program program = AutoImporter.importByUsingBestGuess(file, null, this, new MessageLog(),
+        LoadResults<Program> loadResults = AutoImporter.importByUsingBestGuess(file, null, null, this, new MessageLog(),
                 TaskMonitorAdapter.DUMMY);
+        Program program = loadResults.getPrimaryDomainObject();
         AutoAnalysisManager analysisManager = AutoAnalysisManager.getAnalysisManager(program);
         analysisManager.initializeOptions();
         final int tid = program.startTransaction("analysis");
         GlobalState.currentProgram = program;
         GlobalState.flatAPI = new FlatProgramAPI(program);
-        if (!program.getOptions(Program.PROGRAM_INFO).getBoolean(Program.ANALYZED, false)) {
+        if (!program.getOptions(Program.PROGRAM_INFO).getBoolean(Program.ANALYZED_OPTION_NAME, false)) {
             GlobalState.flatAPI.analyzeAll(program);
         }
         program.endTransaction(tid, true);

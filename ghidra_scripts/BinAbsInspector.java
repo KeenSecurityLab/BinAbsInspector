@@ -8,7 +8,6 @@
 import com.bai.checkers.CheckerManager;
 import com.bai.env.funcs.FunctionModelManager;
 import com.bai.util.Config.HeadlessParser;
-import generic.continues.RethrowContinuesFactory;
 import ghidra.app.util.bin.MemoryByteProvider;
 import ghidra.app.util.bin.format.elf.ElfException;
 import ghidra.app.util.bin.format.elf.ElfHeader;

@@ -8,7 +8,6 @@ import com.bai.env.KSet;
 import com.bai.env.funcs.FunctionModelManager;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import generic.continues.RethrowContinuesFactory;
 import ghidra.app.cmd.function.ApplyFunctionSignatureCmd;
 import ghidra.app.util.bin.MemoryByteProvider;
 import ghidra.app.util.bin.format.elf.ElfException;
@@ -350,14 +349,13 @@ public class Utils {
     public static Function getEntryFunction() {
         try {
             MemoryByteProvider provider = new MemoryByteProvider(GlobalState.currentProgram.getMemory(),
-                    GlobalState.currentProgram.getMinAddress());
-            
+                    GlobalState.currentProgram.getMinAddress(), true);
             Address entryAddress;
             String executableFormat = GlobalState.currentProgram.getExecutableFormat();
             
             switch (executableFormat) {
                 case ElfLoader.ELF_NAME: {
-                    ElfHeader header = ElfHeader.createElfHeader(RethrowContinuesFactory.INSTANCE, provider);
+                    ElfHeader header = new ElfHeader(provider, null);
                     entryAddress = GlobalState.flatAPI.toAddr(header.e_entry());
                     if (entryAddress.subtract(GlobalState.currentProgram.getImageBase()) < 0) {
                         // handle PIE ELF with non-zero base address
@@ -367,8 +365,7 @@ public class Utils {
                 break;
 
                 case PeLoader.PE_NAME: {
-                    PortableExecutable pe = PortableExecutable.createPortableExecutable(
-                            RethrowContinuesFactory.INSTANCE, provider, PortableExecutable.SectionLayout.MEMORY);
+                    PortableExecutable pe = new PortableExecutable(provider, PortableExecutable.SectionLayout.MEMORY);
                     OptionalHeader header = pe.getNTHeader().getOptionalHeader();
                     entryAddress = GlobalState.flatAPI.toAddr(header.getAddressOfEntryPoint());
                     entryAddress = entryAddress.add(GlobalState.currentProgram.getImageBase().getOffset());
