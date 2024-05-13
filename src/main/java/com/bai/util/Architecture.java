@@ -1,6 +1,6 @@
 package com.bai.util;
 
-
+import com.bai.env.ALoc;
 import com.bai.env.AbsVal;
 import com.bai.env.KSet;
 import com.bai.env.region.Global;
@@ -133,6 +133,24 @@ public class Architecture {
     }
 
     /**
+     * Checks if current program is ARM architecture (32 bits).
+     * 
+     * @return true if it is ARM 32 bits, false otherwise
+     */
+    public boolean isArm32() {
+        return processor.equalsIgnoreCase("ARM");
+    }
+
+    /**
+     * Checks if current program is AArch64 architecture (64 bits).
+     * 
+     * @return true if it is AArch64, false otherwise
+     */
+    public boolean isAArch64() {
+        return processor.equalsIgnoreCase("AARCH64");
+    }
+
+    /**
      * Get the KSet of pc register.
      * @param currentAddress address of current instruction.
      * @return the KSet.
@@ -163,5 +181,73 @@ public class Architecture {
         }
         pcKSet = pcKSet.insert(AbsVal.getPtr(Global.getInstance(), pcValue));
         return pcKSet;
+    }
+
+    /**
+     * Checks if the register is a callee saved register.
+     * 
+     * @param aLoc abstract location of the register.
+     * @return the KSet.
+     */
+    public boolean isCalleeSavedRegister(ALoc aLoc) {
+        switch (processor) {
+            case "ARM":
+                return isArm32SavedRegister(aLoc);
+            case "AARCH64":
+                return isAArch64SavedRegister(aLoc);
+            case "x86":
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Checks if the register is a callee saved register of Arm 32 architecture.
+     * Checks if the register is in range r4 - r11, but not r9.
+     * See
+     * https://github.com/NationalSecurityAgency/ghidra/blob/ef3e74b6d3cb9e7ce1ccef20c8660dcb5346066e/Ghidra/Processors/ARM/data/languages/ARM.sinc#L10
+     * See also:
+     * https://github.com/ARM-software/abi-aa/blob/60a8eb8c55e999d74dac5e368fc9d7e36e38dda4/aapcs32/aapcs32.rst
+     * 
+     * @param aLoc abstract location of the register.
+     * @return the KSet.
+     */
+    public static boolean isArm32SavedRegister(ALoc aLoc) {
+        if (!aLoc.getRegion().isReg()) {
+            return false;
+        }
+        long start = aLoc.getBegin();
+        long end = start + aLoc.getLen();
+        // r9
+        if (start == 0x44 && end == 0x48) {
+            return false;
+        }
+        // r4 (0x30) - r11
+        if (start >= 0x30 && end <= 0x50) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the register is a callee saved register of AArch64 architecture.
+     * Checks if the register is in range x19 - x29.
+     * See
+     * https://github.com/NationalSecurityAgency/ghidra/blob/master/Ghidra/Processors/AARCH64/data/languages/AARCH64instructions.sinc#L448
+     * 
+     * @param aLoc abstract location of the register.
+     * @return the KSet.
+     */
+    public static boolean isAArch64SavedRegister(ALoc aLoc) {
+        if (!aLoc.getRegion().isReg()) {
+            return false;
+        }
+        long start = aLoc.getBegin();
+        long end = start + aLoc.getLen();
+        // r19 - r29
+        if (start >= 0x4098 && end <= 0x40F0) {
+            return true;
+        }
+        return false;
     }
 }
