@@ -738,6 +738,12 @@ public class PcodeVisitor {
                 }
             } else {
                 for (JImmutableMap.Entry<ALoc, KSet> entry : exit) {
+                    if (GlobalState.config.getPreserveCalleeSavedReg()) {
+                        // do not overwrite callee saved register
+                        if (GlobalState.arch.isCalleeSavedRegister(entry.getKey())) {
+                            continue;
+                        }
+                    }
                     inOutEnv.set(entry.getKey(), entry.getValue(), true);
                 }
             }
@@ -877,6 +883,12 @@ public class PcodeVisitor {
 
         if (isFinished) {
             for (JImmutableTreeMap.Entry<ALoc, KSet> entry : resEnv.getEnvMap()) {
+                if (GlobalState.config.getPreserveCalleeSavedReg()) {
+                    // do not overwrite callee saved register
+                    if (GlobalState.arch.isCalleeSavedRegister(entry.getKey())) {
+                        continue;
+                    }
+                }
                 inOutEnv.set(entry.getKey(), entry.getValue(), true);
             }
         }

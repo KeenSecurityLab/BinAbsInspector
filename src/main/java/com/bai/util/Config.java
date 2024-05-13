@@ -56,6 +56,7 @@ public class Config {
             System.out.println("        [-disableZ3]");
             System.out.println("        [-all]");
             System.out.println("        [-debug]");
+            System.out.println("        [-PreserveCalleeSavedReg]");
             System.out.println("        [-check \"<cweNo1>[;<cweNo2>...]\"]");
         }
 
@@ -93,6 +94,8 @@ public class Config {
                         CheckerManager.loadAllCheckers(config);
                     } else if (arg.equalsIgnoreCase("-debug")) {
                         config.setDebug(true);
+                    } else if (arg.equalsIgnoreCase("-preserveCalleeSavedReg")) {
+                        config.setPreserveCalleeSavedReg(true);
                     } else if (checkArgument("-check", args, argi)) {
                         String[] checkers = getSubArguments(args, argi);
                         Arrays.stream(checkers)
@@ -142,6 +145,8 @@ public class Config {
 
     private boolean isGUI;
 
+    private boolean preserveCalleeSavedReg;
+
     // for tactic tuning, see:
     // http://www.cs.tau.ac.il/~msagiv/courses/asv/z3py/strategies-examples.htm
     private List<String> z3Tactics = new ArrayList<>();
@@ -157,6 +162,7 @@ public class Config {
         this.entryAddress = null;
         this.isEnableZ3 = true;
         this.externalMapPath = null;
+        this.preserveCalleeSavedReg = false;
     }
 
     /**
@@ -348,6 +354,22 @@ public class Config {
      */
     public void setGUI(boolean isGUI) {
         this.isGUI = isGUI;
+    }
+
+    /**
+     * Preserve the callee saved registers.
+     * @param preserveCalleeSavedReg preserve or not.
+     */
+    public void setPreserveCalleeSavedReg(boolean preserveCalleeSavedReg) {
+        this.preserveCalleeSavedReg = preserveCalleeSavedReg;
+    }
+
+    /**
+     *  Get if the callee saved registers are preserved.
+     * @return true if preserved, false otherwise.
+     */
+    public boolean getPreserveCalleeSavedReg() {
+        return preserveCalleeSavedReg;
     }
 
     @Override
