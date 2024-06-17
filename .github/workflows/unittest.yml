@@ -16,18 +16,16 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - name: Setup Ghidra
+        uses: antoniovazquezblanco/setup-ghidra@v2.0.3
+        with:
+          version: '10.4'
       - uses: actions/cache@v3
         id: cache
         with:
           path: |
             /opt/hostedtoolcache/z3
-            /opt/hostedtoolcache/ghidra
           key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
-      - name: Setup Ghidra
-        uses: er28-0652/setup-ghidra@0.0.6
-        if: steps.cache.outputs.cache-hit != 'true'
-        with:
-          version: '10.4'
       - name: Download Z3
         uses: pavpanchekha/setup-z3@0.2.0
         if: steps.cache.outputs.cache-hit != 'true'
@@ -37,9 +35,7 @@ jobs:
           distribution: 'glibc-2.31'
       - name: Setup Environment variables if use cache
         if: steps.cache.outputs.cache-hit == 'true'
-        run: |
-          echo "CPATH=/opt/hostedtoolcache/z3/4.8.15/x64/z3-4.8.15-x64-glibc-2.31/include" >> $GITHUB_ENV
-          echo "GHIDRA_INSTALL_DIR=/opt/hostedtoolcache/ghidra/10.4/x64" >> $GITHUB_ENV
+        run: echo "CPATH=/opt/hostedtoolcache/z3/4.8.15/x64/z3-4.8.15-x64-glibc-2.31/include" >> $GITHUB_ENV
       - name: Setup Z3
         run: |
           cp $CPATH/../bin/com.microsoft.z3.jar $GITHUB_WORKSPACE/lib/com.microsoft.z3.jar
